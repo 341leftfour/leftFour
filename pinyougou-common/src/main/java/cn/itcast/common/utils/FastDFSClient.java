@@ -21,7 +21,7 @@ public class FastDFSClient {
 	                   //classpath:fastDFS/fdfs_client.conf
 	public FastDFSClient(String conf) throws Exception {
 		if (conf.contains("classpath:")) {
-			System.out.println("哈哈哈哈");
+
 
 			//参数2：获取当前文件的路径 动态获取  拼接上
 			//D:\ideaProject1\341\pinyougou-parent\pinyougou-web-shop\target\classes\fastDFS/fdfs_client.conf
