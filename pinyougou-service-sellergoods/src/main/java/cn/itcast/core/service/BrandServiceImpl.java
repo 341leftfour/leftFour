@@ -50,6 +50,7 @@ public class BrandServiceImpl implements BrandService {
     //添加品牌
     @Override
     public void add(Brand brand) {
+        brand.setStatus("0");
         brandDao.insertSelective(brand);
                 // insert into tb_brand (id,name, 100个字段 ) values (1,haha,null,100个)  执行的效果一样吗？效率？
                 // insert into tb_brand (id,name ) values (1,haha)  一样
@@ -65,7 +66,9 @@ public class BrandServiceImpl implements BrandService {
     //修改
     @Override
     public void update(Brand brand) {
+        brand.setStatus("0");
         brandDao.updateByPrimaryKeySelective(brand);
+
     }
 
     //删除   集合 与数组关系  集合底层是 数组
@@ -96,6 +99,11 @@ public class BrandServiceImpl implements BrandService {
         BrandQuery brandQuery = new BrandQuery();
         BrandQuery.Criteria criteria = brandQuery.createCriteria();
 
+
+        //判断状态
+        if (null != brand.getStatus() && !"".equals(brand.getStatus().trim())) {
+            criteria.andStatusEqualTo(brand.getStatus().trim());
+        }
         //品牌名称  模糊查询
         if(null != brand.getName() && !"".equals(brand.getName().trim())){
             criteria.andNameLike("%" + brand.getName().trim() + "%");
