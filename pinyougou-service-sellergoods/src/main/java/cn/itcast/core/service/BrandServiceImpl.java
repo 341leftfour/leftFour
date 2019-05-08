@@ -102,7 +102,7 @@ public class BrandServiceImpl implements BrandService {
         }
         if(null != brand.getFirstChar() && !"".equals(brand.getFirstChar().trim())){
             criteria.andFirstCharEqualTo(brand.getFirstChar().trim());
-                    //逆向工程 只能单表操作 只有简单查询  超出此范围  手写Sql  人是无敌
+                    //逆向工程 只能单表操作 只有简单查询  超出此范围  手写Sql
         }
         //查询所有
         Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
