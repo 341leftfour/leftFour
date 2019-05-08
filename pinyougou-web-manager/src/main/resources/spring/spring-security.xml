@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<http pattern="/login.html" security="none"/>
+	<http pattern="/css/**" security="none"/>
+	<http pattern="/img/**" security="none"/>
+	<http pattern="/js/**" security="none"/>
+	<http pattern="/plugins/**" security="none"/>
+	
+	<!-- use-expressions:设置是否启动SpEL表达式，默认值是true。 -->
+	<http use-expressions="false">
+		<!-- 
+			配置SpringSecurity的拦截路径（拦截规则） 
+			* pattern:配置拦截规则。   /* 代表的是根路径下的所有资源（不包含子路径） /**代表的是根路径下所有的资源（包含子路径）
+			* access:设置角色  角色命名 ROLE_角色名称  如：  ROLE_USER  
+		-->
+		<intercept-url pattern="/**" access="ROLE_ADMIN"/>
+		
+		<!-- 
+		开启表单验证 
+			username-parameter="username" 
+			password-parameter="password" 
+			login-page			:登录页面名称  以  / 开始
+			default-target-url	:登录成功后跳转的页面
+			login-processing-url:提交的路径的设置 默认值"/login" 可以修改
+
+
+			例如：
+			1）http://localhost:9101/admin/brand.html 地址
+			2）被安全框架拦截  用户名密码 成功
+			3)返回值 之前访问页面 http://localhost:9101/admin/brand.html
+
+
+			但是 我们不希望它返回之前访问页面  我们希望它一直访问我们指定的页面
+			返回值：http://localhost:9101/admin/index.html
+			always-use-default-target="true" 一直访问我们指定的欢迎页面
+
+
+		-->
+		<form-login
+				login-page="/login.html"
+				default-target-url="/admin/index.html"
+				always-use-default-target="true"
+				authentication-failure-url="/login.html"
+		/>
+		
+		<!-- 不使用csrf的校验 -->
+		<csrf disabled="true"/>
+		
+		<!-- 配置框架页面不拦截
+			 index.html 放行
+			 index.html 内部 加载的home.html   是放行 还是拦截呢？
+
+		-->
+		<headers>
+			<frame-options policy="SAMEORIGIN"/>
+		</headers>
+		
+		<!-- 注销的配置 -->
+		<logout logout-url="/logout" logout-success-url="/login.html" />
+	</http>
+	
+	<!-- 配置认证管理器 连接Mysql 没有表   -->
+	<authentication-manager>
+		<!-- 认证的提供者 -->
+		<authentication-provider>
+			<user-service>
+				<user name="admin" password="123456" authorities="ROLE_ADMIN"/>
+				<user name="wc" password="123456" authorities="ROLE_ADMIN"/>
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+		
+</beans:beans>
