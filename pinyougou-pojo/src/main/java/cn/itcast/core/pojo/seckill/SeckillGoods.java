@@ -68,12 +68,12 @@ public class SeckillGoods implements Serializable {
     private Date endTime;
 
     /**
-     * 秒杀商品数
+     * 剩余库存
      */
     private Integer num;
 
     /**
-     * 剩余库存数
+     * 本次上架数量
      */
     private Integer stockCount;
 
