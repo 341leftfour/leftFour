@@ -5,7 +5,7 @@
     <!-- 页面meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>商品管理</title>
+    <title>秒杀商品订单</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
     <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
@@ -76,7 +76,7 @@
                     <input id="selall" type="checkbox" class="icheckbox_square-blue">
                 </th>
                 <th class="sorting_asc">秒杀ID</th>
-                <th class="sorting">商品名称</th>
+                <th class="sorting">商品ID</th>
                 <th class="sorting">支付金额</th>
                 <th class="sorting">用户</th>
                 <th class="sorting">创建时间</th>
@@ -88,8 +88,8 @@
             <tbody>
             <tr ng-repeat="entity in list">
                 <td><input  type="checkbox"></td>
+                <td>{{entity.id}}</td>
                 <td>{{entity.seckillId}}</td>
-                <td>{{entity.goodsName}}</td>
                 <td>{{entity.money}}</td>
                 <td>{{entity.userId}}</td>
                 <td>{{entity.createTime}}</td>
@@ -99,9 +99,7 @@
    <td>
       <button type="button" class="btn bg-olive btn-xs"  ng-click="address(entity)">详情</button>
                 </td>
-                <td class="text-center">
-                    <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>
-                </td>
+
             </tr>
             </tbody>
         </table>
@@ -117,6 +115,11 @@
 <!-- /.box-body -->
 
 
+
+</div>
+
+
 </body>
+
 
 </html>

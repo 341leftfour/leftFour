@@ -23,9 +23,12 @@ app.controller('seckillController',function ($scope,$controller,$location ,secki
            }
 
     $scope.address=function (entity) {
-                alert(entity.money);
+                alert("收货人:"+entity.receiver+'::收货地址'+entity.receiverAddress+"::收货电话"+entity.receiverMobile+"");
 
            }
+
+
+
     
     
     
