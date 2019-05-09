@@ -76,6 +76,10 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 			}			
 		);
 	}
+
+
+    // 显示状态
+    $scope.status = ["待审核","审核通过","审核未通过","关闭"];
 	
 	
 	

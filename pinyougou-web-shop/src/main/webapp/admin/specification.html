@@ -56,13 +56,14 @@
 									<option value="2">审核未通过</option>
 									<option value="3">关闭</option>
 								</select>
-							                    规格名称：<input  >									
-									<button class="btn btn-default" >查询</button>                                    
+									规格名称：<input type="text" ng-model="searchEntity.specName">
+
+     <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
                                 </div>
                             </div>
                             <!--工具栏/-->
 			                  <!--数据列表-->
-			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+			                  <table id="dataList" class="table table-ssbordered table-striped table-hover dataTable">
 			                      <thead>
 			                          <tr>
 			                              <th class="" style="padding-right:0px">

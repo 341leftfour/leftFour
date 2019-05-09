@@ -5,6 +5,7 @@ import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
+import cn.itcast.core.pojo.specification.SpecificationQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -36,7 +37,23 @@ public class SpecificationServiceImpl implements SpecificationService {
         PageHelper.startPage(page,rows);
         //查询分页对象
 
-        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(null);
+
+        //条件查询
+        SpecificationQuery specificationQuery = new SpecificationQuery();
+        SpecificationQuery.Criteria criteria = specificationQuery.createCriteria();
+
+
+        //判断状态
+        if (null != specification.getStatus() && !"".equals(specification.getStatus().trim())) {
+            criteria.andStatusEqualTo(specification.getStatus().trim());
+        }
+        //规格名称  模糊查询
+        if(null != specification.getSpecName() && !"".equals(specification.getSpecName().trim())){
+            criteria.andSpecNameLike("%" + specification.getSpecName().trim() + "%");
+        }
+
+
+        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(specificationQuery);
 
         return new PageResult(p.getTotal(),p.getResult());
     }
@@ -44,6 +61,8 @@ public class SpecificationServiceImpl implements SpecificationService {
     //添加
     @Override
     public void add(SpecificationVo vo) {
+
+        vo.getSpecification().setStatus("0");
         //规格表  1  返回ID
         specificationDao.insertSelective(vo.getSpecification());
          
@@ -84,6 +103,7 @@ public class SpecificationServiceImpl implements SpecificationService {
         specificationOptionDao.deleteByExample(query);
 
         //2:再添加
+        vo.getSpecification().setStatus("0");
         List<SpecificationOption> specificationOptionList = vo.getSpecificationOptionList();
         for (SpecificationOption specificationOption : specificationOptionList) {
             //设置规格的ID 作为 外键
