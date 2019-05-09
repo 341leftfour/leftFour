@@ -63,7 +63,7 @@ public class SpecificationController {
         return specificationService.findOne(id);
     }
 
-    //查询所有规格 返回值List《Map
+    //查询所有规格 返回值List<Map>
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         return specificationService.selectOptionList();
