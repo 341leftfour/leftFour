@@ -59,7 +59,7 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 			// 判断删除是否成功:
 			if(response.flag==true){
 				// 删除成功
-				alert(response.message);
+				//alert(response.message);
 				$scope.reloadList();
 				$scope.selectIds = [];
 			}else{
