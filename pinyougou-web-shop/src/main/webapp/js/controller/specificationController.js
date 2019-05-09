@@ -60,7 +60,8 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 				if(response.flag){
 					$scope.reloadList();//刷新列表
 					$scope.selectIds = [];
-				}						
+				}else{
+                    alert(response.message);}
 			}		
 		);				
 	}

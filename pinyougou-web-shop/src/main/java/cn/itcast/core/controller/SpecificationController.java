@@ -57,6 +57,24 @@ public class SpecificationController {
         }
 
     }
+
+
+
+
+    //删除 开始  查询 Sprignmvc  全局异常处理器
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids){
+
+
+        try {
+            specificationService.delete(ids);
+            return new Result(true,"删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"删除失败");
+        }
+
+    }
     //查询一个规格包装对象
     @RequestMapping("/findOne")
     public SpecificationVo findOne(Long id){

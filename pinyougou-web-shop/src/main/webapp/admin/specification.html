@@ -85,7 +85,11 @@
 		                                  		{{status[entity.status]}}
 		                                  	</span>
 										  </td>
-		                                  <td class="text-center">                                           
+										  <td class="text-center" ng-if="entity.status==3">
+											  <button type="button" class="btn bg-olive btn-xs"   disabled>修改
+											  </button>
+										  </td>
+		                                  <td class="text-center" ng-if="entity.status!=3">
 		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findOne(entity.id)" data-toggle="modal" data-target="#editModal">修改</button>                                           
 		                                  </td>
 			                          </tr>
