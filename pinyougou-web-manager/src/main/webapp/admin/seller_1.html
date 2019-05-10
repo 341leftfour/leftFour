@@ -43,9 +43,9 @@
                             
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							        公司名称：<input  >
-									店铺名称： <input  >									
-									<button class="btn btn-default" >查询</button>                                    
+							        公司名称：<input type="text" ng-model="searchEntity.name">
+									店铺名称：<input type="text" ng-model="searchEntity.nickName">
+									<button class="btn btn-default" ng-click="reloadList()">查询</button>
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -124,7 +124,7 @@
 			      		<td>公司名称</td>
 			      		<td>{{entity.name}}</td>
 			      	</tr>
-			      	<tr>
+					  <tr>
 			      		<td>公司手机</td>
 			      		<td>{{entity.mobile}}</td>
 			      	</tr>
@@ -214,7 +214,7 @@
 		<div class="modal-footer">						
 			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.sellerId,'1')">审核通过</button>
          	<button class="btn btn-danger"  data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.sellerId,'2')">审核未通过</button>
-            <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.sellerId,'3')">关闭商家</button>
+            <!--<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.sellerId,'3')">关闭商家</button>-->
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>

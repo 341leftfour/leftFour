@@ -515,4 +515,10 @@
       bank_name = #{bankName,jdbcType=VARCHAR}
     where seller_id = #{sellerId,jdbcType=VARCHAR}
   </update>
+
+  <!--修改商家审核状态-->
+  <update id="updateStatusById" >
+    update tb_seller set status = #{param2} where seller_id = #{param1}
+  </update>
+
 </mapper>
