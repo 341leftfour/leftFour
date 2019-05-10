@@ -9,7 +9,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static org.aspectj.bridge.Version.getTime;
+
 @Service
 public class SeckillOrderServiceImpl implements SeckillOrderService{
 
@@ -88,7 +93,14 @@ public class SeckillOrderServiceImpl implements SeckillOrderService{
                 //从数据库中再次查询，放入缓存，库存数置为1
                 seckillGoods = seckillGoodsDao.selectByPrimaryKey(seckillOrder.getSeckillId());
                 //是否超过当前活动时间
-                if( seckillGoods.getEndTime().getTime()> new Date().getTime()  ){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                Date date = null;
+                try {
+                    date = simpleDateFormat.parse(seckillGoods.getEndTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if( date.getTime()> new Date().getTime()  ){
                     seckillGoods.setStockCount(1);
                     redisTemplate.boundHashOps("seckillGoods").put(seckillOrder.getSeckillId(),seckillGoods);
                 }

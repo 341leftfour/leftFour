@@ -16,7 +16,6 @@ public interface SeckillGoodsService {
 
     void save(SeckillGoods seckillGoods);
 
-    ;
     public List<SeckillGoods> findList();
     /**
      * 根据ID获取实体(从缓存中读取)
