@@ -61,7 +61,7 @@ public class SpecificationController {
 
 
 
-    //删除 开始  查询 Sprignmvc  全局异常处理器
+    //删除
     @RequestMapping("/delete")
     public Result delete(Long[] ids){
 

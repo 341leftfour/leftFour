@@ -50,6 +50,24 @@ public class TypeTemplateController {
             return new Result(false,"失败");
         }
     }
+
+
+
+
+    //删除
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids){
+
+
+        try {
+            typeTemplateService.delete(ids);
+            return new Result(true,"删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"删除失败");
+        }
+
+    }
     //查询一个模板对象
     @RequestMapping("/findOne")
     public TypeTemplate findOne(Long id){

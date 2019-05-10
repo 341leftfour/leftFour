@@ -60,16 +60,18 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	
 	 
 	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
-		typeTemplateService.dele( $scope.selectIds ).success(
-			function(response){
-				if(response.flag){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds = [];
-				}						
-			}		
-		);				
+	$scope.dele=function(){
+        if(confirm("确认删除吗?")==true) {
+            //获取选中的复选框
+            typeTemplateService.dele($scope.selectIds).success(
+                function (response) {
+                    if (response.flag) {
+                        $scope.reloadList();//刷新列表
+                        $scope.selectIds = [];
+                    }
+                }
+            );
+        }
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
@@ -83,10 +85,17 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 			}			
 		);
 	}
-    
-	$scope.brandList={data:[]}
-	// 查询关联的品牌信息:
-	$scope.findBrandList = function(){
+
+
+    // 显示状态
+    $scope.status = ["待审核","审核通过","审核未通过","关闭"];
+
+
+
+
+    $scope.brandList={data:[]}
+    // 查询关联的品牌信息:
+    $scope.findBrandList = function(){
 		brandService.selectOptionList().success(function(response){
 			$scope.brandList = {data:response};// response json对象  json格式字符串 [{id:3,text:联想},{},{}]
 		});// List<Map>
