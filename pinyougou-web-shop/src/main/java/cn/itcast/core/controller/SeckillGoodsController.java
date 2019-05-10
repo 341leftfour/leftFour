@@ -4,6 +4,7 @@ import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.service.SeckillGoodsService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import entity.PageResult;
 import entity.Result;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,26 @@ public class SeckillGoodsController {
     @Reference
     private SeckillGoodsService seckillGoodsService;
 
+
+
+    @RequestMapping("/save")
+    @JsonFormat(pattern="yyyy-MM-dd HH-mm-ss")
+    public Result save(@RequestBody(required = false) SeckillGoods seckillGoods){
+
+
+            try { if (seckillGoods!=null){
+                seckillGoodsService.save(seckillGoods);
+                return new Result(true,"申请成功");
+            }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        return new Result(true,"申请失败");
+
+
+    }
 
     @RequestMapping("/findByItem")
     public Item findByItem(Long itemId){

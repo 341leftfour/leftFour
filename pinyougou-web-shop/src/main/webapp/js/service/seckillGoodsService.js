@@ -15,5 +15,10 @@ app.service('seckillGoodsService',function ($http) {
 
     }
 
+    this.save=function (seckillGoods) {
+        return $http.post("../seckillGoods/save.do",seckillGoods);
+
+    }
+
 
 })
