@@ -1,7 +1,6 @@
 package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.item.ItemCat;
-import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +23,7 @@ public class ItemCatController {
     public List<ItemCat> findByParentId(Long parentId){
         return itemCatService.findByParentId(parentId);
     }
+
     //查询一个
     @RequestMapping("/findOne")
     public ItemCat findOne(Long id){
