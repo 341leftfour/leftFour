@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>秒杀商品申请</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- 引入angular的js -->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 引入分页相关的JS和CSS -->
+    <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/seckillGoodsController.js"></script>
+    <script type="text/javascript" src="../js/service/seckillGoodsService.js"></script>
+    <script type="text/javascript" src="../js/service/uploadService.js"></script>
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="seckillGoodsController">
+<!-- .box-body -->
+<div class="box-header with-border">
+    <h3 class="box-title">秒杀申请</h3>
+</div>
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal" ng-click="findItemList();entity={}"><i class="fa fa-file-o"></i> 新建秒杀商品
+                    </button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
+                            class="fa fa-trash-o"></i> 删除
+                    </button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                状态：<select ng-model="searchEntity.status">
+                <option value="">全部</option>
+                <option value="0">待审核</option>
+                <option value="1">审核通过</option>
+                <option value="2">审核未通过</option>
+                <option value="3">关闭</option>
+            </select>
+
+                品牌名称:<input type="text" ng-model="searchEntity.name">
+                品牌首字母:<input type="text" ng-model="searchEntity.firstChar">
+                <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting_asc">标题</th>
+
+                <th class="sorting">商品图片</th>
+                <th class="sorting">原价格</th>
+                <th class="sorting">秒杀价格</th>
+                <th class="text-center">添加日期</th>
+                <th class="text-center">审核日期</th>
+                <th class="text-center">审核状态</th>
+                <th class="text-center">开始时间</th>
+                <th class="text-center">结束时间</th>
+                <th class="text-center">秒杀商品数</th>
+                <th class="text-center">剩余库存数</th>
+                <th class="text-center">描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in list">
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+                <td>{{entity.title}}</td>
+                <td>    <img src="{{entity.smallPic}}" width="30px" height="30px"/></td>
+                <td>{{entity.price}}</td>
+                <td>{{entity.costPrice}}</td>
+                <td>{{entity.createTime}}</td>
+                <td>{{entity.checkTime}}</td>
+                <td>{{status[entity.status]}}</td>
+                <td>{{entity.startTime}}</td>
+                <td>{{entity.endTime}}</td>
+                <td>{{entity.num}}</td>
+                <td>{{entity.stockCount}}</td>
+                <td>{{entity.introduction}}</td>
+                <td>
+		                                  	<span>
+
+		                                  	</span>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)"
+                            data-toggle="modal" data-target="#editModal">修改
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>
+        <!--数据列表/-->
+
+
+    </div>
+    <!-- 数据表格 /-->
+    <!-- 分页 -->
+    <tm-pagination conf="paginationConf"></tm-pagination>
+
+</div>
+
+<!-- /.box-body -->
+
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">品牌编辑</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" width="800px">
+                    <tr>
+                       <td>商品名称</td>
+                    <td>
+                    <select class="form-control" ng-model="itemId" ng-options="item.id as item.title for item in itemList">
+                    </select>
+                </td>
+                    </tr>
+
+                    <tr>
+                        <td>剩余库存数</td>
+                        <td><input ng-model="entity.newSeckill.num" class="form-control" placeholder="剩余库存数" disabled></td>
+                    </tr>
+                    <tr>
+                        <td>本次上架数量</td>
+                        <td><input ng-model="entity.newSeckill.stockCount" class="form-control" placeholder="本次上架数量" ></td>
+                    </tr>
+                    <tr>
+                        <td>原价格</td>
+                        <td><input ng-model="entity.newSeckill.price" class="form-control" disabled  placeholder="原价格"></td>
+                    </tr>
+                    <tr>
+                        <td>秒杀价格</td>
+                        <td><input ng-model="entity.newSeckill.costPrice" class="form-control" placeholder="秒杀价格"  ></td>
+                    </tr>
+
+                    <tr>
+                        <td>开始时间</td>
+                        <td><input type="datetime-local"    ng-model="entity.newSeckill.startTime" class="form-control" placeholder="开始时间"  ></td>
+
+
+                    </tr>
+                    <tr>
+                        <td>结束时间</td>
+                        <td><input type="datetime-local"  ng-model="entity.newSeckill.endTime"  class="form-control" placeholder="结束时间"  ></td>
+                    </tr>
+                    <tr>
+                        <td>活动描述</td>
+                        <td><input ng-model="entity.newSeckill.introduction;"  class="form-control" placeholder="活动描述"  ></td>
+                    </tr>
+                    <tr>
+                        <td>商品图片</td>
+                        <td>
+                            <input type="file" id="file" />
+                            <button class="btn btn-primary" type="button" ng-click="uploadFile()">
+                                上传
+                            </button>
+                        </td>
+                        <td>
+                <img   src='{{entity.newSeckill.smallPic}}'  width="200px" height="200px">
+                        </td>
+                    </tr>
+
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存
+                </button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/service/seckillGoodsService.js"></script>
+    <script src="js/controller/seckillGoodsController.js"></script>
+
+</head>
+<body ng-app="pinyougou" ng-controller="seckillGoodsController" ng-init="findOne()">
+<h4>{{entity.title}}</h4>
+<span class="jqzoom"><img jqimg="{{entity.smallPic}}" src="{{entity.smallPic}}" width="400px" height="400px"/></span>
+<div class="fl price"><i>¥</i>
+    <em>{{entity.costPrice}}</em>
+    <span>原价：{{entity.price}}</span>
+</div>
+<div class="intro-detail">{{entity.introduction}}</div>
+剩余库存：{{entity.stockCount}}<br/>
+<span class="overtime"> 距离结束：{{timeString}}</span>
+<a ng-click="submitOrder()" target="_blank" class="sui-btn  btn-danger addshopcar">秒杀抢购</a>
+</body>
+</html>

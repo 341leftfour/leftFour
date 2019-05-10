@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="plugins/angularjs/angular.min.js">  </script>
+    <script type="text/javascript" src="js/base.js">  </script>
+    <script type="text/javascript" src="js/service/seckillGoodsService.js">  </script>
+    <script src="js/controller/seckillGoodsController.js">  </script>
+
+</head>
+<body ng-app="pinyougou" ng-controller="seckillGoodsController" ng-init="findList()">
+<ul>
+<li class="seckill-item" ng-repeat="pojo in list">
+    <div class="pic">
+        <img src="{{pojo.smallPic}}" width="290px" height="290px" alt=''>
+    </div>
+    <div class="intro"><span>{{pojo.title}}</span></div>
+    <div class='price'><b class='sec-price'>￥{{pojo.costPrice}}</b><b class='ever-price'>￥{{pojo.price}}</b></div>
+    <div class='num'>
+        <div>已售{{ ((pojo.num-pojo.stockCount)/pojo.num*100).toFixed(0) }}%</div>
+        <div class='progress'>
+            <div class='sui-progress progress-danger'><span style='width: {{ ((pojo.num-pojo.stockCount)/pojo.num*100).toFixed(0) }}%;' class='bar'></span></div>
+        </div>
+        <div>剩余<b class='owned'>{{pojo.stockCount}}</b>件</div>
+    </div>
+    <a class='sui-btn btn-block btn-buy' href='seckill-item.html#?id={{pojo.id}}' target='_blank'>立即抢购</a>
+</li>
+</ul>
+</body>
+</html>
