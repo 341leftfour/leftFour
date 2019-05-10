@@ -12,4 +12,8 @@ public interface SeckillGoodsService {
     List<Item> findItemList(String sellerId);
 
     Item findByItem(Long itemId);
+
+    void save(SeckillGoods seckillGoods);
+
+    ;
 }

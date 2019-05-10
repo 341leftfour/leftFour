@@ -14,6 +14,8 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -51,5 +53,14 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
     public Item findByItem(Long itemId) {
 
         return itemDao.selectByPrimaryKey(itemId);
+    }
+
+    @Override
+    public void save(SeckillGoods seckillGoods) {
+        //等待审核
+        seckillGoods.setStatus("0");
+        //加入上传时间
+        seckillGoods.setCheckTime(new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()));
+        seckillGoodsDao.insertSelective(seckillGoods);
     }
 }

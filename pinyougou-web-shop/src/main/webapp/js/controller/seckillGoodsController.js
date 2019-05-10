@@ -1,4 +1,4 @@
-app.controller('seckillGoodsController',function ($scope,$controller,seckillGoodsService) {
+app.controller('seckillGoodsController',function ($scope,$controller,seckillGoodsService,uploadService) {
     $controller("baseController",{$scope:$scope})//继承controller
 
     //初始化赋值
@@ -19,7 +19,14 @@ app.controller('seckillGoodsController',function ($scope,$controller,seckillGood
         if(newValue!=null){
         //根据获取到的新值返回item
         seckillGoodsService.findByItem(newValue).success(function (response) {
+
             $scope.entity.newSeckill=response;
+            $scope.entity.newSeckill.itemId=response.id;
+            $scope.entity.newSeckill.id=null;
+            $scope.entity.newSeckill.status=null;
+            //传入新的itemid
+
+
 
         })}
     })
@@ -28,6 +35,21 @@ app.controller('seckillGoodsController',function ($scope,$controller,seckillGood
         seckillGoodsService.findItemList().success(function (response) {
             //findItem,查询select 框
             $scope.itemList=response;
+        })
+    }
+
+    $scope.save=function () {
+
+        seckillGoodsService.save($scope.entity.newSeckill).success(function (response) {
+
+            alert(response.message);
+        })
+    }
+
+    $scope.uploadFile=function () {
+        uploadService.uploadFile().success(function (response) {
+            $scope.entity.newSeckill.smallPic=response.message;
+
         })
     }
 
