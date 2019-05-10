@@ -2,9 +2,11 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.specification.SpecificationDao;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
+import cn.itcast.core.pojo.good.BrandQuery;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
+import cn.itcast.core.pojo.specification.SpecificationQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vo.SpecificationVo;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +39,22 @@ public class SpecificationServiceImpl implements SpecificationService {
         PageHelper.startPage(page,rows);
         //查询分页对象
 
-        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(null);
+
+        //条件查询
+        SpecificationQuery specificationQuery = new SpecificationQuery();
+        SpecificationQuery.Criteria criteria = specificationQuery.createCriteria();
+
+
+        //判断状态
+        if (null != specification.getStatus() && !"".equals(specification.getStatus().trim())) {
+            criteria.andStatusEqualTo(specification.getStatus().trim());
+        }
+        //规格名称  模糊查询
+        if(null != specification.getSpecName() && !"".equals(specification.getSpecName().trim())){
+            criteria.andSpecNameLike("%" + specification.getSpecName().trim() + "%");
+        }
+
+        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(specificationQuery);
 
         return new PageResult(p.getTotal(),p.getResult());
     }
@@ -44,6 +62,8 @@ public class SpecificationServiceImpl implements SpecificationService {
     //添加
     @Override
     public void add(SpecificationVo vo) {
+
+        vo.getSpecification().setStatus("0");
         //规格表  1  返回ID
         specificationDao.insertSelective(vo.getSpecification());
          
@@ -74,21 +94,34 @@ public class SpecificationServiceImpl implements SpecificationService {
     //修改
     @Override
     public void update(SpecificationVo vo) {
-        //规格表 修改
-        specificationDao.updateByPrimaryKeySelective(vo.getSpecification());
 
-        //规格选项表
-        // 1:先删除
-        SpecificationOptionQuery query = new SpecificationOptionQuery();
-        query.createCriteria().andSpecIdEqualTo(vo.getSpecification().getId());
-        specificationOptionDao.deleteByExample(query);
+        SpecificationOptionQuery specificationOptionQuery = new SpecificationOptionQuery();
+        specificationOptionQuery.createCriteria().andSpecIdEqualTo(vo.getSpecification().getId());
+        List<SpecificationOption> specificationOptions = specificationOptionDao.selectByExample(specificationOptionQuery);
+        SpecificationVo vo2 = new SpecificationVo();
+        vo2.setSpecificationOptionList(specificationOptions);
+        vo2.setSpecification(specificationDao.selectByPrimaryKey(vo.getSpecification().getId()));
 
-        //2:再添加
-        List<SpecificationOption> specificationOptionList = vo.getSpecificationOptionList();
-        for (SpecificationOption specificationOption : specificationOptionList) {
-            //设置规格的ID 作为 外键
-            specificationOption.setSpecId(vo.getSpecification().getId());
-            specificationOptionDao.insertSelective(specificationOption);
+        if (!vo.equals(vo2)) {
+            vo.getSpecification().setStatus("0");
+
+            //规格表 修改
+            specificationDao.updateByPrimaryKeySelective(vo.getSpecification());
+
+            //规格选项表
+            // 1:先删除
+            SpecificationOptionQuery query = new SpecificationOptionQuery();
+            query.createCriteria().andSpecIdEqualTo(vo.getSpecification().getId());
+            specificationOptionDao.deleteByExample(query);
+
+            //2:再添加
+
+            List<SpecificationOption> specificationOptionList = vo.getSpecificationOptionList();
+            for (SpecificationOption specificationOption : specificationOptionList) {
+                //设置规格的ID 作为 外键
+                specificationOption.setSpecId(vo.getSpecification().getId());
+                specificationOptionDao.insertSelective(specificationOption);
+            }
         }
     }
 
@@ -96,5 +129,27 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public List<Map> selectOptionList() {
         return specificationDao.selectOptionList();
+    }
+
+    //删除规格
+    @Override
+    public void delete(Long[] ids) {
+        if(null != ids && ids.length > 0){
+            //一个一个删除
+         /*   for (Long id : ids) {
+                brandDao.deleteByPrimaryKey(id);
+            }*/
+            //批量删除 delete * from tb_brand where id in (1,2,3)
+            //删除主规格
+            SpecificationQuery query = new SpecificationQuery();
+            query.createCriteria().andIdIn(Arrays.asList(ids));
+            specificationDao.deleteByExample(query);
+
+
+            //删除副规格
+            SpecificationOptionQuery query2 = new SpecificationOptionQuery();
+            query2.createCriteria().andSpecIdIn(Arrays.asList(ids));
+            specificationOptionDao.deleteByExample(query2);
+        }
     }
 }

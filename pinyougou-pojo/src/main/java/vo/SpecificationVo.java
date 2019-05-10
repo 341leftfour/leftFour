@@ -5,6 +5,7 @@ import cn.itcast.core.pojo.specification.SpecificationOption;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 包装对象
@@ -31,5 +32,20 @@ public class SpecificationVo implements Serializable{
 
     public void setSpecificationOptionList(List<SpecificationOption> specificationOptionList) {
         this.specificationOptionList = specificationOptionList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpecificationVo that = (SpecificationVo) o;
+        return Objects.equals(specification, that.specification) &&
+                Objects.equals(specificationOptionList, that.specificationOptionList);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(specification, specificationOptionList);
     }
 }

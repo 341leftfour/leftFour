@@ -36,7 +36,7 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 			// 判断保存是否成功:
 			if(response.flag){
 				// 保存成功
-				alert(response.message);
+				//alert(response.message);
 				$scope.reloadList();
 			}else{
 				// 保存失败
@@ -55,18 +55,20 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 	
 	// 删除品牌:
 	$scope.dele = function(){
-		brandService.dele($scope.selectIds).success(function(response){
-			// 判断保存是否成功:
-			if(response.flag==true){
-				// 保存成功
-				// alert(response.message);
-				$scope.reloadList();
-				$scope.selectIds = [];
-			}else{
-				// 保存失败
-				alert(response.message);
-			}
-		});
+	    if(confirm("确认删除吗?")==true) {
+            brandService.dele($scope.selectIds).success(function (response) {
+                // 判断删除是否成功:
+                if (response.flag == true) {
+                    // 删除成功
+                    //alert(response.message);
+                    $scope.reloadList();
+                    $scope.selectIds = [];
+                } else {
+                    // 保存失败
+                    alert(response.message);
+                }
+            });
+        }
 	}
 	
 	$scope.searchEntity={};

@@ -66,8 +66,10 @@ public class BrandServiceImpl implements BrandService {
     //修改
     @Override
     public void update(Brand brand) {
-        brand.setStatus("0");
-        brandDao.updateByPrimaryKeySelective(brand);
+        if (!brandDao.selectByPrimaryKey(brand.getId()).equals(brand)){
+            brand.setStatus("0");
+            brandDao.updateByPrimaryKeySelective(brand);
+        }
 
     }
 
