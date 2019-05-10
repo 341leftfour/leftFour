@@ -86,5 +86,14 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	$scope.deleteTableRow = function(index){
 		$scope.entity.specificationOptionList.splice(index,1);
 	}
-    
+
+
+    $scope.updateStatus=function (status) {
+        specificationService.updateStatus(status,$scope.selectIds).success(function (response) {
+
+            alert(response.message);
+            $scope.reloadList();
+        })
+    }
+    $scope.status=['待审核','批准通过','驳回',null];
 });	

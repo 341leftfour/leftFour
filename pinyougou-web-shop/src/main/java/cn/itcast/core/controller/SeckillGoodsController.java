@@ -44,7 +44,6 @@ public class SeckillGoodsController {
 
     @RequestMapping("/findByItem")
     public Item findByItem(Long itemId){
-
         try {
 
             return  seckillGoodsService.findByItem(itemId);

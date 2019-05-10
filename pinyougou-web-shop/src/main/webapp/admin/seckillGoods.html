@@ -99,7 +99,7 @@
                 <td>{{entity.costPrice}}</td>
                 <td>{{entity.createTime}}</td>
                 <td>{{entity.checkTime}}</td>
-                <td>{{entity.status=='1'?'已审核':entity.status=='0'?'审核中':'审核失败'}}</td>
+                <td>{{status[entity.status]}}</td>
                 <td>{{entity.startTime}}</td>
                 <td>{{entity.endTime}}</td>
                 <td>{{entity.num}}</td>
@@ -107,7 +107,7 @@
                 <td>{{entity.introduction}}</td>
                 <td>
 		                                  	<span>
-		                                  		{{status[entity.status]}}
+
 		                                  	</span>
                 </td>
                 <td class="text-center">

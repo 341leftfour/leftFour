@@ -28,6 +28,20 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
+@RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids,String status){
+
+    try {
+        if (ids==null && ids.length==0){
+            return null;
+        }
+        brandService.updateStatus(     ids,  status);
+        return new Result(true,"状态成功");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return new Result(true,"状态失败");
+}
 
 
     //查询所有品牌

@@ -1,6 +1,8 @@
 app.controller('seckillGoodsController',function ($scope,$controller,seckillGoodsService,uploadService) {
     $controller("baseController",{$scope:$scope})//继承controller
 
+    $scope.status = ["待审核","审核通过","审核未通过","关闭"];
+
     //初始化赋值
     $scope.searchEntity ={};
     $scope.search=function (page,rows){
@@ -52,5 +54,8 @@ app.controller('seckillGoodsController',function ($scope,$controller,seckillGood
 
         })
     }
+
+
+
 
 })
