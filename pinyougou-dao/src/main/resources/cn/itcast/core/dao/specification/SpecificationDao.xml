@@ -108,7 +108,7 @@
     values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" >
+  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" keyProperty="id" useGeneratedKeys="true">
     insert into tb_specification
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -183,4 +183,11 @@
       status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <!--  //查询所有规格
+  List<Map> selectOptionList();-->
+  <select id="selectOptionList" resultType="map">
+    select id,spec_name text from tb_specification
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import cn.itcast.core.pojo.good.BrandQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BrandDao {
     int countByExample(BrandQuery example);
@@ -28,4 +29,6 @@ public interface BrandDao {
     int updateByPrimaryKeySelective(Brand record);
 
     int updateByPrimaryKey(Brand record);
+
+    List<Map> selectOptionList();
 }

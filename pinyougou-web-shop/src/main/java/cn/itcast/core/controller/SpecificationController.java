@@ -1,54 +1,61 @@
 package cn.itcast.core.controller;
 
-import cn.itcast.core.pojo.template.TypeTemplate;
-import cn.itcast.core.service.TypeTemplateService;
+import cn.itcast.core.pojo.specification.Specification;
+import cn.itcast.core.service.SpecificationService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
 import entity.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vo.SpecificationVo;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 模板管理
+ * 规格管理
  */
-//@SuppressWarnings("all")
+@SuppressWarnings("all")
 @RestController
-@RequestMapping("/typeTemplate")
-public class TypeTemplateController {
+@RequestMapping("/specification")
+public class SpecificationController {
+
 
     @Reference
-    private TypeTemplateService typeTemplateService;
+    private SpecificationService specificationService;
 
-    //查询
+    //查询分页 条件
     @RequestMapping("/search")
-    public PageResult search(Integer page, Integer rows, @RequestBody TypeTemplate typeTemplate){
-        return typeTemplateService.search(page,rows,typeTemplate);
+    public PageResult search(Integer page, Integer rows, @RequestBody Specification specification){
+        return specificationService.search(page,rows,specification);
     }
-    //添加
+    //规格保存
     @RequestMapping("/add")
-    public Result add(@RequestBody TypeTemplate typeTemplate){
+    public Result add(@RequestBody SpecificationVo vo){
+
         try {
-            typeTemplateService.add(typeTemplate);
+
+            specificationService.add(vo);
             return new Result(true,"成功");
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false,"失败");
         }
+
     }
-    //添加
+    //修改
     @RequestMapping("/update")
-    public Result update(@RequestBody TypeTemplate typeTemplate){
+    public Result update(@RequestBody SpecificationVo vo){
+
         try {
-            typeTemplateService.update(typeTemplate);
+            specificationService.update(vo);
             return new Result(true,"成功");
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false,"失败");
         }
+
     }
 
 
@@ -60,7 +67,7 @@ public class TypeTemplateController {
 
 
         try {
-            typeTemplateService.delete(ids);
+            specificationService.delete(ids);
             return new Result(true,"删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,17 +75,15 @@ public class TypeTemplateController {
         }
 
     }
-    //查询一个模板对象
+    //查询一个规格包装对象
     @RequestMapping("/findOne")
-    public TypeTemplate findOne(Long id){
-        return typeTemplateService.findOne(id);
+    public SpecificationVo findOne(Long id){
+        return specificationService.findOne(id);
     }
 
-
-    //根据模板ID 查询 规格结果集 List<Map
-    @RequestMapping("/findBySpecList")
-    public List<Map> findBySpecList(Long id){
-        return typeTemplateService.findBySpecList(id);
+    //查询所有规格 返回值List<Map>
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList(){
+        return specificationService.selectOptionList();
     }
-
 }

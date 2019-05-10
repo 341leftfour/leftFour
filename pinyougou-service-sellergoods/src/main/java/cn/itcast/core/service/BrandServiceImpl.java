@@ -50,6 +50,7 @@ public class BrandServiceImpl implements BrandService {
     //添加品牌
     @Override
     public void add(Brand brand) {
+        brand.setStatus("0");
         brandDao.insertSelective(brand);
                 // insert into tb_brand (id,name, 100个字段 ) values (1,haha,null,100个)  执行的效果一样吗？效率？
                 // insert into tb_brand (id,name ) values (1,haha)  一样
@@ -65,7 +66,11 @@ public class BrandServiceImpl implements BrandService {
     //修改
     @Override
     public void update(Brand brand) {
-        brandDao.updateByPrimaryKeySelective(brand);
+        if (!brandDao.selectByPrimaryKey(brand.getId()).equals(brand)){
+            brand.setStatus("0");
+            brandDao.updateByPrimaryKeySelective(brand);
+        }
+
     }
 
     //删除   集合 与数组关系  集合底层是 数组
@@ -96,13 +101,18 @@ public class BrandServiceImpl implements BrandService {
         BrandQuery brandQuery = new BrandQuery();
         BrandQuery.Criteria criteria = brandQuery.createCriteria();
 
+
+        //判断状态
+        if (null != brand.getStatus() && !"".equals(brand.getStatus().trim())) {
+            criteria.andStatusEqualTo(brand.getStatus().trim());
+        }
         //品牌名称  模糊查询
         if(null != brand.getName() && !"".equals(brand.getName().trim())){
             criteria.andNameLike("%" + brand.getName().trim() + "%");
         }
         if(null != brand.getFirstChar() && !"".equals(brand.getFirstChar().trim())){
             criteria.andFirstCharEqualTo(brand.getFirstChar().trim());
-                    //逆向工程 只能单表操作 只有简单查询  超出此范围  手写Sql  人是无敌
+                    //逆向工程 只能单表操作 只有简单查询  超出此范围  手写Sql
         }
         //查询所有
         Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
@@ -115,5 +125,16 @@ public class BrandServiceImpl implements BrandService {
     public List<Map> selectOptionList() {
         //List<Brand> brandList = brandDao.selectByExample(null);
         return brandDao.selectOptionList();
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+
+        Brand brand = new Brand();
+        brand.setStatus(status);
+        for (Long id : ids) {
+            brand.setId(id);
+            brandDao.updateByPrimaryKeySelective(brand);
+        }
     }
 }

@@ -1,11 +1,11 @@
  //控制层 
-app.controller('specificationController' ,function($scope,$controller   ,specificationService){	
+app.controller('specificationOptionController' ,function($scope,$controller   ,specificationOptionService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
-		specificationService.findAll().success(
+		specificationOptionService.findAll().success(
 			function(response){
 				$scope.list=response;
 			}			
@@ -14,7 +14,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	
 	//分页
 	$scope.findPage=function(page,rows){			
-		specificationService.findPage(page,rows).success(
+		specificationOptionService.findPage(page,rows).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
@@ -24,7 +24,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	
 	//查询实体 
 	$scope.findOne=function(id){				
-		specificationService.findOne(id).success(
+		specificationOptionService.findOne(id).success(
 			function(response){
 				$scope.entity= response;					
 			}
@@ -34,10 +34,10 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
-		if($scope.entity.specification.id!=null){//如果有ID
-			serviceObject=specificationService.update( $scope.entity ); //修改  
+		if($scope.entity.id!=null){//如果有ID
+			serviceObject=specificationOptionService.update( $scope.entity ); //修改  
 		}else{
-			serviceObject=specificationService.add( $scope.entity  );//增加 
+			serviceObject=specificationOptionService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
@@ -55,7 +55,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	//批量删除 
 	$scope.dele=function(){			
 		//获取选中的复选框			
-		specificationService.dele( $scope.selectIds ).success(
+		specificationOptionService.dele( $scope.selectIds ).success(
 			function(response){
 				if(response.flag){
 					$scope.reloadList();//刷新列表
@@ -69,31 +69,12 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	
 	//搜索
 	$scope.search=function(page,rows){			
-		specificationService.search(page,rows,$scope.searchEntity).success(
+		specificationOptionService.search(page,rows,$scope.searchEntity).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
 	}
-	
-	
-	
-	$scope.addTableRow = function(){
-		$scope.entity.specificationOptionList.push({});
-	}
-	
-	$scope.deleteTableRow = function(index){
-		$scope.entity.specificationOptionList.splice(index,1);
-	}
-
-
-    $scope.updateStatus=function (status) {
-        specificationService.updateStatus(status,$scope.selectIds).success(function (response) {
-
-            alert(response.message);
-            $scope.reloadList();
-        })
-    }
-    $scope.status=['待审核','批准通过','驳回',null];
+    
 });	

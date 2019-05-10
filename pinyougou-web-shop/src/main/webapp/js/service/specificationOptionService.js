@@ -28,6 +28,5 @@ app.service('specificationOptionService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../specificationOption/search.do?page='+page+"&rows="+rows, searchEntity);
-	}
-
+	}    	
 });

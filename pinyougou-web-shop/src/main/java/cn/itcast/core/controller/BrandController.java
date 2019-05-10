@@ -7,11 +7,8 @@ import entity.PageResult;
 import entity.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.JspAwareRequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -23,25 +20,12 @@ import java.util.Map;
 public class BrandController {
 
 
+    //啦啦啦猜猜我是  谁
     //远程调用 品牌接口
     //成员变量
     @Reference
     private BrandService brandService;
 
-@RequestMapping("/updateStatus")
-    public Result updateStatus(Long[] ids,String status){
-
-    try {
-        if (ids==null && ids.length==0){
-            return null;
-        }
-        brandService.updateStatus(     ids,  status);
-        return new Result(true,"状态成功");
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return new Result(true,"状态失败");
-}
 
 
     //查询所有品牌
