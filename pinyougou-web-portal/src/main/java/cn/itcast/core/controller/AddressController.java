@@ -24,4 +24,5 @@ public class AddressController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         return addressService.findListByLoginUser(name);
     }
+
 }

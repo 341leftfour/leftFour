@@ -27,4 +27,7 @@ public interface SellerDao {
     int updateByPrimaryKeySelective(Seller record);
 
     int updateByPrimaryKey(Seller record);
+
+    //修改商家审核状态
+    void updateStatusById(String sellerId, String status);
 }
