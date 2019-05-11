@@ -25,6 +25,20 @@ public class SpecificationController {
     @Reference
     private SpecificationService specificationService;
 
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids,String status){
+
+        try {
+            if (ids==null && ids.length==0){
+                return null;
+            }
+            specificationService.updateStatus(     ids,  status);
+            return new Result(true,"状态成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true,"状态失败");
+    }
     //查询分页 条件
     @RequestMapping("/search")
     public PageResult search(Integer page, Integer rows, @RequestBody Specification specification){

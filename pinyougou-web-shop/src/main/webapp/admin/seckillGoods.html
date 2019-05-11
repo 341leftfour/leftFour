@@ -61,8 +61,8 @@
                 <option value="3">关闭</option>
             </select>
 
-                品牌名称:<input type="text" ng-model="searchEntity.name">
-                品牌首字母:<input type="text" ng-model="searchEntity.firstChar">
+                开始时间:<input type="text" ng-model="searchEntity.startTime">
+                结束时间:<input type="text" ng-model="searchEntity.endTime">
                 <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
             </div>
         </div>
@@ -99,7 +99,7 @@
                 <td>{{entity.costPrice}}</td>
                 <td>{{entity.createTime}}</td>
                 <td>{{entity.checkTime}}</td>
-                <td>{{entity.status=='1'?'已审核':entity.status=='0'?'审核中':'审核失败'}}</td>
+                <td>{{status[entity.status]}}</td>
                 <td>{{entity.startTime}}</td>
                 <td>{{entity.endTime}}</td>
                 <td>{{entity.num}}</td>
@@ -107,7 +107,7 @@
                 <td>{{entity.introduction}}</td>
                 <td>
 		                                  	<span>
-		                                  		{{status[entity.status]}}
+
 		                                  	</span>
                 </td>
                 <td class="text-center">

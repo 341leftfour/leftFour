@@ -33,4 +33,17 @@ public class SeckillServiceImpl implements SeckillService {
         return new PageResult(  pageList.getTotal(), pageList.getResult());
 
     }
+
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        //修改商品状态
+        SeckillOrder seckillOrder = new SeckillOrder();
+        seckillOrder.setStatus(status);
+
+        for (Long id : ids) {
+            seckillOrder.setId(id);
+            seckillOrderDao.updateByPrimaryKeySelective(seckillOrder);
+        }
+
+    }
 }

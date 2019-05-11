@@ -24,7 +24,6 @@
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
 
-
     <script type="text/javascript" src="../js/controller/seckillController.js"></script>
     <script type="text/javascript" src="../js/service/seckillService.js"></script>
 </head>
@@ -45,10 +44,9 @@
         <div class="pull-left">
             <div class="form-group form-inline">
                 <div class="btn-group">
-                    <a href="goods_edit.html"  class="btn btn-default">新建</a>
+
                     <button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
-                    <button type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
-                    <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
+                    <button type="button" class="btn btn-default" ng-click="updateStatus('1')" title="发货" ><i class="fa fa-trash-o"></i> 发货</button>
                     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                 </div>
             </div>
@@ -87,14 +85,14 @@
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
-                <td><input  type="checkbox"></td>
+ <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.seckillId}}</td>
                 <td>{{entity.money}}</td>
                 <td>{{entity.userId}}</td>
                 <td>{{entity.createTime}}</td>
                 <td>{{entity.payTime}}</td>
-                <td>{{entity.status=='1'?'已送达':entity.status=='0'?'未发货':'运输中'}}</td>
+                <td>{{entity.status=='1'?'已发货':entity.status=='0'?'已送达':'未发货'}}</td>
 
    <td>
       <button type="button" class="btn bg-olive btn-xs"  ng-click="address(entity)">详情</button>

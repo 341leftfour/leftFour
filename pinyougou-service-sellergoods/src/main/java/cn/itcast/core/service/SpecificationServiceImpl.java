@@ -2,6 +2,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.specification.SpecificationDao;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
@@ -12,6 +13,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import vo.SpecificationVo;
 
@@ -150,6 +152,21 @@ public class SpecificationServiceImpl implements SpecificationService {
             SpecificationOptionQuery query2 = new SpecificationOptionQuery();
             query2.createCriteria().andSpecIdIn(Arrays.asList(ids));
             specificationOptionDao.deleteByExample(query2);
+        }
+    }
+
+
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+
+        Specification specification = new Specification();
+        specification.setStatus(status);
+        for (Long id : ids) {
+            specification.setId(id);
+            specificationDao.updateByPrimaryKeySelective(specification);
+
+
         }
     }
 }
