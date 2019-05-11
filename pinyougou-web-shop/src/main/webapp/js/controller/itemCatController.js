@@ -34,11 +34,9 @@ app.controller('itemCatController' ,function($scope,$controller ,itemCatService)
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
-			serviceObject=itemCatService.update( $scope.entity ); //修改  
-		}else{
+
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
-		}				
+
 		serviceObject.success(
 			function(response){
 				if(response.flag){
@@ -71,7 +69,7 @@ app.controller('itemCatController' ,function($scope,$controller ,itemCatService)
 	$scope.search=function(page,rows){
 		itemCatService.search(page,rows,$scope.searchEntity).success(
 			function(response){
-				$scope.list=response.rows;	
+				$scope.list=response.rows;
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
@@ -100,41 +98,21 @@ app.controller('itemCatController' ,function($scope,$controller ,itemCatService)
     $scope.$watch("itemCatId1",function(newValue,oldValue){
         if(newValue!=null){
             //根据获取到的新值返回item
-            itemCatService.findByItem(newValue).success(function (response) {
+            itemCatService.findByParentId(newValue).success(function (response) {
 
-                $scope.entity.newSeckill=response;
-                $scope.entity.newSeckill.itemId=response.id;
-                $scope.entity.newSeckill.id=null;
-                $scope.entity.newSeckill.status=null;
+                $scope.selectCatList2=response;
+
                 //传入新的itemid
-
-
 
             })}
     })
 
 
-    //监听二级分类名称
-    $scope.$watch("itemCatId2",function(newValue,oldValue){
-        if(newValue!=null){
-            //根据获取到的新值返回item
-            itemCatService.findOne(newValue).success(function (response) {
-
-                $scope.entity.newSeckill=response;
-                $scope.entity.newSeckill.itemId=response.id;
-                $scope.entity.newSeckill.id=null;
-                $scope.entity.newSeckill.status=null;
-                //传入新的itemid
-
-
-
-            })}
-    })
 	
 	// 根据父ID查询分类
 	$scope.findByParentId =function(parentId){
 		itemCatService.findByParentId(parentId).success(function(response){
-			$scope.list=response;
+			$scope.selectCatList1=response;
 		});
 	}
 

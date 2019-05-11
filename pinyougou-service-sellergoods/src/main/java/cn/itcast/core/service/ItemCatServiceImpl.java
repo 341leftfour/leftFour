@@ -3,7 +3,6 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
-import cn.itcast.core.pojo.item.ItemQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -11,9 +10,6 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -31,12 +27,17 @@ public class ItemCatServiceImpl implements ItemCatService {
     //根据父ID查询
     @Override
     public List<ItemCat> findByParentId(Long parentId) {
-
-
-        //正常查询  列表页面 显几个商品分类
         ItemCatQuery itemCatQuery = new ItemCatQuery();
-        itemCatQuery.createCriteria().andParentIdEqualTo(parentId);
-        return itemCatDao.selectByExample(itemCatQuery);
+
+if (parentId ==null){
+    itemCatQuery.createCriteria().andParentIdEqualTo(0l);
+    return itemCatDao.selectByExample(itemCatQuery);
+}else {
+
+    itemCatQuery.createCriteria().andParentIdEqualTo(parentId);
+    return itemCatDao.selectByExample(itemCatQuery);
+}
+
     }
 
     //查询一个
@@ -75,6 +76,12 @@ public class ItemCatServiceImpl implements ItemCatService {
         Page<ItemCat> p = (Page<ItemCat>) itemCatDao.selectByExample(itemCatQuery);
 
         return new PageResult(p.getTotal(),p.getResult());
+    }
+
+    @Override
+    public void add(ItemCat itemCat) {
+        itemCat.setStatus("0");
+        itemCatDao.insertSelective(itemCat);
     }
 
 }

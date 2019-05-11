@@ -116,4 +116,6 @@ public class ItemCat implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
+
+
 }

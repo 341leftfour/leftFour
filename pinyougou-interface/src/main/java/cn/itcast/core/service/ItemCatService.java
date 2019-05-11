@@ -15,4 +15,5 @@ public interface ItemCatService {
 
     PageResult search(Integer page, Integer rows,ItemCat itemCat);
 
+    void add(ItemCat itemCat);
 }
