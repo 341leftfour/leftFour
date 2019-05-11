@@ -7,6 +7,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
 
 
+import entity.Result;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,4 +32,19 @@ public class SeckillController {
         }
         return null;
     }
+
+
+
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(String status,Long[] ids){
+        try {
+            seckillService.updateStatus(status,ids);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  new Result(false,"失败");
+        }
+
+    }
+
 }

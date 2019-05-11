@@ -58,6 +58,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService{
     }
     @Override
     public SeckillOrder  searchOrderFromRedisByUserId(String userId) {
+
         return (SeckillOrder) redisTemplate.boundHashOps("seckillOrder").get(userId);
     }
 
