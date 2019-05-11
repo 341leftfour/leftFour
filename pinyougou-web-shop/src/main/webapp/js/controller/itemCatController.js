@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller ,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -80,6 +80,56 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 
     // 显示状态
     $scope.status = ["待审核","审核通过","审核未通过","关闭"];
+
+
+
+    $scope.itemCatList = [];
+    // 显示分类:
+    $scope.findItemCatList = function(){
+        //查询所有商品分类
+        itemCatService.findAll().success(function(response){//response List<ItemCat>
+
+            for(var i=0;i<response.length;i++){
+                $scope.itemCatList[response[i].id] = response[i].name;
+            }
+        });
+    }
+
+
+    //监听一级分类名称
+    $scope.$watch("itemCatId1",function(newValue,oldValue){
+        if(newValue!=null){
+            //根据获取到的新值返回item
+            itemCatService.findByItem(newValue).success(function (response) {
+
+                $scope.entity.newSeckill=response;
+                $scope.entity.newSeckill.itemId=response.id;
+                $scope.entity.newSeckill.id=null;
+                $scope.entity.newSeckill.status=null;
+                //传入新的itemid
+
+
+
+            })}
+    })
+
+
+    //监听二级分类名称
+    $scope.$watch("itemCatId2",function(newValue,oldValue){
+        if(newValue!=null){
+            //根据获取到的新值返回item
+            itemCatService.findOne(newValue).success(function (response) {
+
+                $scope.entity.newSeckill=response;
+                $scope.entity.newSeckill.itemId=response.id;
+                $scope.entity.newSeckill.id=null;
+                $scope.entity.newSeckill.status=null;
+                //传入新的itemid
+
+
+
+            })}
+    })
 	
 	// 根据父ID查询分类
 	$scope.findByParentId =function(parentId){
@@ -87,39 +137,6 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			$scope.list=response;
 		});
 	}
-	
-	// 定义一个变量记录当前是第几级分类
-	$scope.grade = 1;
-	
-	$scope.setGrade = function(value){
-		$scope.grade = value;
-	}
-	
-	$scope.selectList = function(p_entity){
 
-		if($scope.grade == 1){
-			$scope.entity_1 = null;
-			$scope.entity_2 = null;
-		}
-		if($scope.grade == 2){
-			$scope.entity_1 = p_entity;
-			$scope.entity_2 = null;
-		}
-		if($scope.grade == 3){
-			$scope.entity_2 = p_entity;
-		}
-		
-		$scope.findByParentId(p_entity.id);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
+
 });	
