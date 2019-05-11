@@ -68,7 +68,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	$scope.searchEntity={};//定义搜索对象 
 	
 	//搜索
-	$scope.search=function(page,rows){			
+	$scope.search=function(page,rows){
 		itemCatService.search(page,rows,$scope.searchEntity).success(
 			function(response){
 				$scope.list=response.rows;	
@@ -76,6 +76,10 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
+
+
+    // 显示状态
+    $scope.status = ["待审核","审核通过","审核未通过","关闭"];
 	
 	// 根据父ID查询分类
 	$scope.findByParentId =function(parentId){
@@ -92,7 +96,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	}
 	
 	$scope.selectList = function(p_entity){
-		
+
 		if($scope.grade == 1){
 			$scope.entity_1 = null;
 			$scope.entity_2 = null;

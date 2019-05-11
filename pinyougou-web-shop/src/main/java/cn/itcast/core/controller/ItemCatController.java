@@ -3,9 +3,13 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import entity.PageResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -34,5 +38,16 @@ public class ItemCatController {
     @RequestMapping("/findAll")
     public List<ItemCat> findAll(){
         return itemCatService.findAll();
+    }
+
+
+
+    //查询分页对象 条件对象
+    @RequestMapping("/search")
+    public PageResult search(Integer page, Integer rows, @RequestBody ItemCat itemCat){
+
+        return itemCatService.search(page,rows,itemCat);
+
+
     }
 }

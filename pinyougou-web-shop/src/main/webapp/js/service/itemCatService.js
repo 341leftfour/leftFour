@@ -27,6 +27,7 @@ app.service('itemCatService',function($http){
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
+		alert(parentId)
 		return $http.post('../itemCat/search.do?page='+page+"&rows="+rows, searchEntity);
 	}    	
 	
