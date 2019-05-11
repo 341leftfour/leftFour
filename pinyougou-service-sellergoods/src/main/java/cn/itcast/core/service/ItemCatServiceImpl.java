@@ -8,7 +8,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
@@ -22,21 +21,14 @@ public class ItemCatServiceImpl implements ItemCatService {
 
     @Autowired
     private ItemCatDao itemCatDao;
-    @Autowired
-    private RedisTemplate redisTemplate;
     //根据父ID查询
     @Override
     public List<ItemCat> findByParentId(Long parentId) {
         ItemCatQuery itemCatQuery = new ItemCatQuery();
 
-if (parentId ==null){
-    itemCatQuery.createCriteria().andParentIdEqualTo(0l);
-    return itemCatDao.selectByExample(itemCatQuery);
-}else {
-
     itemCatQuery.createCriteria().andParentIdEqualTo(parentId);
     return itemCatDao.selectByExample(itemCatQuery);
-}
+
 
     }
 
@@ -49,7 +41,6 @@ if (parentId ==null){
     //查询所有商品分类结果集
     @Override
     public List<ItemCat> findAll() {
-
         return itemCatDao.selectByExample(null);
     }
 
