@@ -5,11 +5,18 @@ import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.seckill.SeckillOrder;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.dubbo.container.page.PageHandler;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,5 +153,30 @@ public class OrderServiceImpl implements  OrderService {
 
 
 
+    }
+
+    @Override
+    public PageResult search(Integer page, Integer rows, Order order) {
+        PageHelper.startPage(page,rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        if(null!=order.getSellerId() && !"".equals(order.getSellerId())){
+            criteria.andSellerIdEqualTo(order.getSellerId());
+        }
+        orderQuery.setOrderByClause("create_time DESC");
+        Page<Order> orders = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(orders.getTotal(),orders.getResult());
+    }
+
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        //修改商品状态
+        Order order = new Order();
+        order.setStatus(status);
+
+        for (Long id : ids) {
+            order.setOrderId(id);
+            orderDao.updateByPrimaryKeySelective(order);
+        }
     }
 }
