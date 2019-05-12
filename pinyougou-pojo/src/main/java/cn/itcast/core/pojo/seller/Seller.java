@@ -124,6 +124,20 @@ public class Seller implements Serializable {
      */
     private String bankName;
 
+
+    /**
+     *  订单数量
+     */
+    private Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getSellerId() {

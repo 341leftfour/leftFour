@@ -1,8 +1,10 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.dao.seller.SellerDao;
+import cn.itcast.core.dao.user.UserDao;
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojo.seller.SellerQuery;
+import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 商家管理
@@ -23,6 +26,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Autowired
     private SellerDao sellerDao;
+    @Autowired
+    private UserDao userDao;
+
     //申请入驻
     @Override
     public void add(Seller seller) {
@@ -86,6 +92,20 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public void updateStatus(String sellerId, String status) {
         sellerDao.updateStatusById(sellerId,status);
+    }
+
+
+    /**
+     *   查询一个商家对象
+     */
+    @Override
+    public List<Seller> findAll() {
+        UserQuery userQuery = new UserQuery();
+        userQuery.setOrderByClause("created");
+        userDao.selectByExample(userQuery);
+
+        List<Seller> sellerList = sellerDao.selectByExample(null);
+        return sellerList;
     }
 }
 

@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class OrderServiceImpl implements  OrderService {
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements  OrderService {
                 //单价
                 orderItem.setPrice(item.getPrice());
                 //小计
-                orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue()*orderItem.getNum()));
+                orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue() * orderItem.getNum()));
 
 
                 //计算此订单的总金额
@@ -114,7 +114,7 @@ public class OrderServiceImpl implements  OrderService {
             //商家ID
             order.setSellerId(cart.getSellerId());
 
-            tp += order.getPayment().doubleValue()*100;
+            tp += order.getPayment().doubleValue() * 100;
 
             //保存订单
             orderDao.insertSelective(order);
@@ -139,20 +139,28 @@ public class OrderServiceImpl implements  OrderService {
         //支付类型
         payLog.setPayType("1");
         //订单集合   "1,2,3,4,5"
-        payLog.setOrderList(ids.toString().replace("[","").replace("]",""));
+        payLog.setOrderList(ids.toString().replace("[", "").replace("]", ""));
 
         //保存
         payLogDao.insertSelective(payLog);
 
         //保存缓存一份
-        redisTemplate.boundHashOps("payLog").put(order.getUserId(),payLog);
+        redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);
 
         //清除购物车
         //redisTemplate.boundHashOps("CART").delete(order.getUserId());
         //删除购物车中已经购买的商品
+    }
 
 
+    /**
+     * 通过商家ID ，查询订单表，获取订单数量(即商家销量)
+     */
+    @Override
+    public Integer selectCountBySellerId(String sellerId) {
 
+        Integer num = orderDao.selectCountBySellerId(sellerId);
+        return num;
     }
 
     @Override
