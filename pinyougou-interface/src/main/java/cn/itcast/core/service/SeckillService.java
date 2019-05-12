@@ -7,4 +7,6 @@ import entity.PageResult;
 
 public interface SeckillService {
     PageResult search(Integer page, Integer rows, SeckillOrder seckillOrder);
+
+    void updateStatus(String status, Long[] ids);
 }
