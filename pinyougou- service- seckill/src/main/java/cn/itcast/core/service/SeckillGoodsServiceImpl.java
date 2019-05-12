@@ -51,6 +51,16 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
         return  (SeckillGoods)redisTemplate.boundHashOps("seckillGoods").get(id);
     }
 
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        //遍历
+        for (Long id : ids) {
+            SeckillGoods seckillGoods = seckillGoodsDao.selectByPrimaryKey ( id );
+            seckillGoods.setStatus ( status );
+            seckillGoodsDao.updateByPrimaryKey (seckillGoods);
+        }
+    }
+
 
     @Autowired
     private ItemDao itemDao;
@@ -60,9 +70,12 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
     public PageResult search(Integer page, Integer rows, SeckillGoods seckillGoods) {
         PageHelper.startPage(page,rows);
         SeckillGoodsQuery query = new SeckillGoodsQuery();
-        //绑定sellerid
-        query.createCriteria().andSellerIdEqualTo(seckillGoods.getSellerId());
-
+        if (seckillGoods.getSellerId()!=null) {
+            //绑定sellerid
+            query.createCriteria ().andSellerIdEqualTo ( seckillGoods.getSellerId () );
+        }else {
+            query.createCriteria ();
+        }
 
         //返回结果集
         Page<SeckillGoods> result = (Page<SeckillGoods>) seckillGoodsDao.selectByExample(query);

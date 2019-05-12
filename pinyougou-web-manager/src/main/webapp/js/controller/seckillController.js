@@ -1,34 +1,47 @@
 //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService  ,typeTemplateService){	
+app.controller('seckillController' ,function($scope,$controller,seckillService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
-		typeTemplateService.findAll().success(
+        seckillService.findAll().success(
 			function(response){
 				$scope.list=response;
 			}			
 		);
-	}    
-	
+	}
+
 	//分页
-	$scope.findPage=function(page,rows){			
-		typeTemplateService.findPage(page,rows).success(
+	$scope.findPage=function(page,rows){
+        seckillService.findPage(page,rows).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
 	}
-	
-	//查询实体 
-	$scope.findOne=function(id){				
-		typeTemplateService.findOne(id).success(
+
+    // 显示状态
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+    // 审核的方法:,
+
+	$scope.updateStatus=function (status) {
+        seckillService.updateStatus(status,$scope.selectIds).success(function (response) {
+
+		 	alert(response.message);
+		 	$scope.reloadList();
+         })
+    }
+
+
+	//查询实体
+	$scope.findOne=function(id){
+        seckillService.findOne(id).success(
 			function(response){// TypeTemplate对象
 				$scope.entity= response;
 
-				// eval()   JSON.parse();   
+				// eval()   JSON.parse();
 				$scope.entity.brandIds = JSON.parse($scope.entity.brandIds);
 				
 				$scope.entity.specIds = JSON.parse($scope.entity.specIds);
@@ -42,9 +55,9 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
 		if($scope.entity.id!=null){//如果有ID
-			serviceObject=typeTemplateService.update( $scope.entity ); //修改  
+			serviceObject=seckillService.update( $scope.entity ); //修改
 		}else{
-			serviceObject=typeTemplateService.add( $scope.entity  );//增加 
+			serviceObject=seckillService.add( $scope.entity  );//增加
 		}				
 		serviceObject.success(
 			function(response){
@@ -60,42 +73,33 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	
 	 
 	//批量删除 
-	$scope.dele=function(){
-        if(confirm("确认删除吗?")==true) {
-            //获取选中的复选框
-            typeTemplateService.dele($scope.selectIds).success(
-                function (response) {
-                    if (response.flag) {
-                        $scope.reloadList();//刷新列表
-                        $scope.selectIds = [];
-                    }
-                }
-            );
-        }
+	$scope.dele=function(){			
+		//获取选中的复选框			
+        seckillService.dele( $scope.selectIds ).success(
+			function(response){
+				if(response.flag){
+					$scope.reloadList();//刷新列表
+					$scope.selectIds = [];
+				}						
+			}		
+		);				
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
 	
 	//搜索
-	$scope.search=function(page,rows){			
-		typeTemplateService.search(page,rows,$scope.searchEntity).success(
+	$scope.search=function(page,rows){
+        seckillService.search(page,rows,$scope.searchEntity).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
 	}
-
-
-    // 显示状态
-    $scope.status = ["待审核","审核通过","审核未通过","关闭"];
-
-
-
-
-    $scope.brandList={data:[]}
-    // 查询关联的品牌信息:
-    $scope.findBrandList = function(){
+    
+	$scope.brandList={data:[]}
+	// 查询关联的品牌信息:
+	$scope.findBrandList = function(){
 		brandService.selectOptionList().success(function(response){
 			$scope.brandList = {data:response};// response json对象  json格式字符串 [{id:3,text:联想},{},{}]
 		});// List<Map>
@@ -118,17 +122,4 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
-
-    $scope.updateStatus = function(status){
-
-
-        typeTemplateService.updateStatus($scope.selectIds,status).success(function(response){
-            if(response.flag){
-                $scope.reloadList();//刷新列表
-                $scope.selectIds = [];
-            }else{
-                alert(response.message);
-            }
-        });
-    }
 });	

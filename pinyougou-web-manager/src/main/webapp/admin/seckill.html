@@ -23,10 +23,8 @@
     
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
-    <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
-    <script type="text/javascript" src="../js/service/brandService.js"></script>
-    <script type="text/javascript" src="../js/service/specificationService.js"></script>
-    <script type="text/javascript" src="../js/controller/typeTemplateController.js"></script>
+    <script type="text/javascript" src="../js/service/seckillService.js"></script>
+    <script type="text/javascript" src="../js/controller/seckillController.js"></script>
 
     <!-- 引入select2的相关的css和js -->
     <link rel="stylesheet" href="../plugins/select2/select2.css" />
@@ -36,7 +34,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="typeTemplateController" ng-init="findBrandList();findSpecList();">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="seckillController">
   <!-- .box-body -->
                 
                     <div class="box-header with-border">
@@ -74,43 +72,59 @@
 							</div>
 							<!--工具栏/-->
 
-			                  <!--数据列表-->
-			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
-			                      <thead>
-			                          <tr>
-			                              <th class="" style="padding-right:0px">
-			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue">
-			                              </th> 
-										  <th class="sorting_asc">模板ID</th>
-									      <th class="sorting">分类模板名称</th>
-									      <th class="sorting">关联品牌</th>
-									      <th class="sorting">关联规格</th>									     
-									      <th class="sorting">扩展属性</th>
-										  <th class="sorting">状态</th>
-										  <th class="text-center">操作</th>
-			                          </tr>
-			                      </thead>
-			                      <tbody>
-			                          <tr ng-repeat="entity in list">
-			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
-				                          <td>{{entity.id}}</td>
-									      <td>{{entity.name}}</td>
-									      <td>{{jsonToString(entity.brandIds,'text')}}</td>
-									      <td>{{jsonToString(entity.specIds,'text')}}</td>									 
-									      <td>{{jsonToString(entity.customAttributeItems,'text')}}</td>
-										  <td>
-		                                  	<span>
-		                                  		{{status[entity.status]}}
-		                                  	</span>
+							<!--数据列表-->
+							<table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+								<thead>
+								<tr>
+									<th class="" style="padding-right:0px">
+										<input id="selall" type="checkbox" class="icheckbox_square-blue">
+									</th>
+									<th class="sorting_asc">标题</th>
 
-										  </td>
-										  <td class="text-center">
-		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findOne(entity.id)" data-toggle="modal" data-target="#editModal" >修改</button>                                           
-		                                  </td>
-			                          </tr>
-			                      </tbody>
-			                  </table>
-			                  <!--数据列表/-->                        
+									<th class="sorting">商品图片</th>
+									<th class="sorting">原价格</th>
+									<th class="sorting">秒杀价格</th>
+									<th class="text-center">添加日期</th>
+									<th class="text-center">审核日期</th>
+									<th class="text-center">审核状态</th>
+									<th class="text-center">开始时间</th>
+									<th class="text-center">结束时间</th>
+									<th class="text-center">秒杀商品数</th>
+									<th class="text-center">剩余库存数</th>
+									<th class="text-center">描述</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="entity in list">
+									<td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+									<td>{{entity.title}}</td>
+									<td>    <img src="{{entity.smallPic}}" width="30px" height="30px"/></td>
+									<td>{{entity.price}}</td>
+									<td>{{entity.costPrice}}</td>
+									<td>{{entity.createTime}}</td>
+									<td>{{entity.checkTime}}</td>
+									<td>{{status[entity.status]}}</td>
+									<td>{{entity.startTime}}</td>
+									<td>{{entity.endTime}}</td>
+									<td>{{entity.num}}</td>
+									<td>{{entity.stockCount}}</td>
+									<td>{{entity.introduction}}</td>
+									<td>
+		                                  	<span>
+
+		                                  	</span>
+									</td>
+									<td class="text-center">
+										<button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)"
+												data-toggle="modal" data-target="#editModal">修改
+										</button>
+									</td>
+								</tr>
+
+								</tbody>
+
+							</table>
+							<!--数据列表/-->
 							  <!-- 分页 -->
 							<tm-pagination conf="paginationConf"></tm-pagination>
 							 

@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -21,14 +21,18 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
-	
+    $scope.list1 = [];
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){
 		itemCatService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+
+                if(response.parentId==0){
+                    $scope.list1[0] = response;
+				}
+
 			}
-		);				
+		);
 	}
 	
 	//保存 
@@ -64,7 +68,18 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}		
 		);				
 	}
-	
+
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+    $scope.itemCatList = [];
+    // 显示分类:
+    $scope.findItemCatList = function(){
+
+        itemCatService.findAll().success(function(response){
+            for(var i=0;i<response.length;i++){
+                $scope.itemCatList[response[i].id] = response[i].name;
+            }
+        });
+    }
 	$scope.searchEntity={};//定义搜索对象 
 	
 	//搜索

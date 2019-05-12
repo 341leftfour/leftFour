@@ -22,6 +22,5 @@ public interface SeckillGoodsService {
      */
     public SeckillGoods findOneFromRedis(Long id);
 
-
-
+    void updateStatus(Long[] ids, String status);
 }
