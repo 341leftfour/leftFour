@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <!-- 页面meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>品牌申请</title>
+    <title>分类申请</title>
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
     <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
@@ -18,15 +20,20 @@
     <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
 
+    <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
-    <script type="text/javascript" src="../js/controller/brandController.js"></script>
-    <script type="text/javascript" src="../js/service/brandService.js"></script>
+    <script type="text/javascript" src="../js/controller/itemCatController.js"></script>
+    <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="itemCatController"
+      ng-init="findByParentId('0');findItemCatList()">
 <!-- .box-body -->
+
 <div class="box-header with-border">
-    <h3 class="box-title">品牌申请</h3>
+    <h3 class="box-title">商品管理</h3>
 </div>
 
 <div class="box-body">
@@ -40,9 +47,6 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
                             data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建
-                    </button>
-                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
-                            class="fa fa-trash-o"></i> 删除
                     </button>
                     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                             class="fa fa-refresh"></i> 刷新
@@ -59,10 +63,8 @@
                 <option value="2">审核未通过</option>
                 <option value="3">关闭</option>
             </select>
-
-                品牌名称:<input type="text" ng-model="searchEntity.name">
-                品牌首字母:<input type="text" ng-model="searchEntity.firstChar">
-                <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
+                分类名称：<input type="text" ng-model="searchEntity.name">
+                <button class="btn btn-default" ng-click="reloadList()">查询</button>
             </div>
         </div>
         <!--工具栏/-->
@@ -74,35 +76,29 @@
                 <th class="" style="padding-right:0px">
                     <input id="selall" type="checkbox" class="icheckbox_square-blue">
                 </th>
-                <th class="sorting_asc">品牌ID</th>
-                <th class="sorting">品牌名称</th>
-                <th class="sorting">品牌首字母</th>
+                <th class="sorting_asc">分类ID</th>
+                <!--<th class="sorting">一级分类</th>-->
+                <th class="sorting">分类名称</th>
+                <th class="sorting">所属分类</th>
                 <th class="sorting">状态</th>
-                <!--<th class="text-center">操作</th>-->
+
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
-                <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
-                <td>{{entity.id}}</td>
-                <td>{{entity.name}}</td>
-                <td>{{entity.firstChar}}</td>
-                <td>
-		                                  	<span>
-		                                  		{{status[entity.status]}}
-		                                  	</span>
-                </td>
-                <!--<td class="text-center" ng-if="entity.status==3">-->
-                    <!--<button type="button" class="btn bg-olive btn-xs"   disabled>修改-->
-                    <!--</button>-->
-                <!--</td>-->
-                <!--<td class="text-center" ng-if="entity.status!=3">-->
-                    <!--<button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)"-->
-                            <!--data-toggle="modal" data-target="#editModal"   >修改-->
-                    <!--</button>-->
-                <!--</td>-->
-            </tr>
+                <td><input type="checkbox"></td>
 
+                <td>{{entity.id}}</td>
+                <!--<td>{{itemCatList[entity.category1Id]}}</td>-->
+                <td>{{entity.name}}</td>
+                <td>{{itemCatList[entity.parentId]}}</td>
+                <td>
+		            <span>
+		                {{status[entity.status]}}
+		            </span>
+                </td>
+
+            </tr>
             </tbody>
         </table>
         <!--数据列表/-->
@@ -114,7 +110,6 @@
     <tm-pagination conf="paginationConf"></tm-pagination>
 
 </div>
-
 <!-- /.box-body -->
 
 <!-- 编辑窗口 -->
@@ -124,18 +119,32 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">品牌编辑</h3>
+                <h3 id="myModalLabel">新建分类</h3>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-striped" width="800px">
+                <table class="table table-bordered table-striped" width="900px">
                     <tr>
-                        <td>品牌名称</td>
-                        <td><input ng-model="entity.name" class="form-control" placeholder="品牌名称"></td>
+                        <td>一级分类名称</td>
+                        <td>
+                            <select class="form-control" ng-model="itemCatId1"
+                                    ng-options="itemCat.id as itemCat.name for itemCat in selectCatList1">
+                            </select>
+                        </td>
                     </tr>
                     <tr>
-                        <td>首字母</td>
-                        <td><input ng-model="entity.firstChar" class="form-control" placeholder="首字母"></td>
+                        <td>二级分类名称</td>
+                        <td>
+                            <select class="form-control"
+                                    ng-model="entity.parentId"  ng-options="itemCat.id as itemCat.name for itemCat in selectCatList2">
+                            </select>
+                        </td>
                     </tr>
+
+                    <tr>
+                        <td>分类名称</td>
+                        <td><input ng-model="entity.name" class="form-control" placeholder="分类名称"></td>
+                    </tr>
+
                 </table>
             </div>
             <div class="modal-footer">

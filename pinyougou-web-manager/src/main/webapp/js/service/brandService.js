@@ -34,4 +34,10 @@ app.service("brandService",function($http){
     this.updateStatus=function (status,ids) {
         return $http.get("../brand/updateStatus.do?ids="+ids+"&status="+status);
     }
+    this.importExcel = function(file){
+        return $http.get("../brand/importExcel.do?file="+file);
+    }
+    this.exportExcel = function(file){
+        return $http.post("../brand/exportExcel.do?file="+file);
+    }
 });

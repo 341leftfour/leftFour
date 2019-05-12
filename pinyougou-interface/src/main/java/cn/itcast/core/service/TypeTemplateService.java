@@ -3,6 +3,7 @@ package cn.itcast.core.service;
 import cn.itcast.core.pojo.template.TypeTemplate;
 import entity.PageResult;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,4 +23,8 @@ public interface TypeTemplateService {
     void updateStatus(Long[] ids, String status);
 
     void delete(Long[] ids);
+
+    void importExcel() throws IOException;
+
+    void exportExcel();
 }

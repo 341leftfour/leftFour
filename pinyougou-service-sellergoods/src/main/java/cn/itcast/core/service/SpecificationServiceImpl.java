@@ -1,9 +1,12 @@
 package cn.itcast.core.service;
 
+import cn.itcast.common.utils.ExportExcel;
+import cn.itcast.common.utils.ImportExcel;
 import cn.itcast.core.dao.specification.SpecificationDao;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
+import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
@@ -13,10 +16,12 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import vo.SpecificationVo;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +37,10 @@ public class SpecificationServiceImpl implements SpecificationService {
     private SpecificationDao specificationDao;
     @Autowired
     private SpecificationOptionDao specificationOptionDao;
+    @Value("${importExcelSpecification}")
+    private String importExcelSpecification;
+    @Value("${exportExcelSpecification}")
+    private String exportExcelSpecification;
 
     //查询分页 条件
     @Override
@@ -168,5 +177,20 @@ public class SpecificationServiceImpl implements SpecificationService {
 
 
         }
+    }
+
+    @Override
+    public void importExcel() throws IOException {
+        List<Specification> list = (List<Specification>) ImportExcel.importExcel(importExcelSpecification, 2, 0, Specification.class);
+        for (Specification specification : list) {
+            specificationDao.insertSelective(specification);
+        }
+    }
+
+    @Override
+    public void exportExcel() {
+        String[] headers = {"ID","规格名称","状态"};
+        List<Specification> specificationList = specificationDao.selectByExample(null);
+        ExportExcel.exportExcel("规格表","规格",headers,specificationList,exportExcelSpecification,"yyyy-MM-dd");
     }
 }

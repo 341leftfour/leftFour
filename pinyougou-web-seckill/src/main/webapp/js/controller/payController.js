@@ -44,5 +44,12 @@ app.controller('payController' ,function($scope ,$location,payService){
 	$scope.getMoney=function(){
 		return $location.search()['money'];
 	}
+
+    //取消支付
+    $scope.cancelPay=function(){
+        payService.cancelPay().success(function (response) {
+            location.href="paycancel.html";
+        })
+    }
 	
 });

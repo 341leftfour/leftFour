@@ -36,4 +36,10 @@ app.service('specificationService',function($http){
     this.updateStatus=function (status,ids) {
         return $http.get("../specification/updateStatus.do?ids="+ids+"&status="+status);
     }
+    this.importExcel = function(){
+        return $http.get("../specification/importExcel.do");
+    }
+    this.exportExcel = function(){
+        return $http.get("../specification/exportExcel.do");
+    }
 });

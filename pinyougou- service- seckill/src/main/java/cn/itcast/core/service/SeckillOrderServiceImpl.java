@@ -58,6 +58,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService{
     }
     @Override
     public SeckillOrder  searchOrderFromRedisByUserId(String userId) {
+
         return (SeckillOrder) redisTemplate.boundHashOps("seckillOrder").get(userId);
     }
 
@@ -83,7 +84,8 @@ public class SeckillOrderServiceImpl implements SeckillOrderService{
     @Override
     public void deleteOrderFromRedis(String userId, Long orderId) {
         SeckillOrder seckillOrder=(SeckillOrder) redisTemplate.boundHashOps("seckillOrder").get(userId);
-        if(seckillOrder!=null  && seckillOrder.getId().longValue()== orderId.longValue()){
+
+        if(seckillOrder!=null){//&& seckillOrder.getId().longValue()== orderId.longValue()
             redisTemplate.boundHashOps("seckillOrder").delete(userId);
             //恢复库存
             SeckillGoods seckillGoods= (SeckillGoods)redisTemplate.boundHashOps("seckillGoods").get(seckillOrder.getSeckillId());
@@ -106,6 +108,13 @@ public class SeckillOrderServiceImpl implements SeckillOrderService{
                 }
             }
         }
+    }
+
+    @Override
+    public void cancelPay(String userId) {
+
+        deleteOrderFromRedis(userId,null);
+
     }
 
 

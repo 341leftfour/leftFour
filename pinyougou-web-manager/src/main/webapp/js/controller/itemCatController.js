@@ -122,15 +122,20 @@ app.controller('itemCatController' ,function($scope,$controller,itemCatService){
 		
 		$scope.findByParentId(p_entity.id);
 	}
+
+    // Excel数据导入到数据库
+    $scope.importExcel=function () {
+        itemCatService.importExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
+    // Excel数据导出到数据库
+    $scope.exportExcel=function () {
+        itemCatService.exportExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
     
 });	

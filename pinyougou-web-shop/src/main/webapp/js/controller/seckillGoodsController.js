@@ -45,6 +45,7 @@ app.controller('seckillGoodsController',function ($scope,$controller,seckillGood
         seckillGoodsService.save($scope.entity.newSeckill).success(function (response) {
 
             alert(response.message);
+            $scope.reloadList();
         })
     }
 
