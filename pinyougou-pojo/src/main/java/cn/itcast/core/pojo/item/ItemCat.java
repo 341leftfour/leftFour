@@ -1,6 +1,7 @@
 package cn.itcast.core.pojo.item;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ItemCat implements Serializable {
     /**
@@ -22,6 +23,14 @@ public class ItemCat implements Serializable {
      * 类型id
      */
     private Long typeId;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     /**
      * 未审核0审核1
@@ -120,4 +129,6 @@ public class ItemCat implements Serializable {
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         return result;
     }
+
+
 }
