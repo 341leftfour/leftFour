@@ -27,6 +27,12 @@ public class ItemCatServiceImpl implements ItemCatService {
     private ItemCatDao itemCatDao;
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Override
+    public void add(ItemCat itemCat) {
+        itemCat.setStatus("0");
+        itemCatDao.insertSelective(itemCat);
+    }
     //根据父ID查询
     @Override
     public List<ItemCat> findByParentId(Long parentId) {

@@ -39,4 +39,9 @@ app.service('itemCatService',function($http){
     this.exportExcel = function(){
         return $http.get("../itemCat/exportExcel.do");
     }
+
+    this.updateStatus=function (status, ids) {
+    	alert('1');
+        return $http.get('../itemCat/updateStatus.do?ids='+ids+"&status="+status);
+    }
 });
