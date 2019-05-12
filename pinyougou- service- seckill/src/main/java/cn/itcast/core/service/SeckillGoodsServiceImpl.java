@@ -78,7 +78,6 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
 
     @Override
     public Item findByItem(Long itemId) {
-
         return itemDao.selectByPrimaryKey(itemId);
     }
 

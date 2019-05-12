@@ -30,4 +30,6 @@ public interface SeckillOrderService {
     public void deleteOrderFromRedis(String userId,Long orderId);
 
 
+
+    void cancelPay(String userId);
 }

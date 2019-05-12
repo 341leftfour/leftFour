@@ -94,6 +94,17 @@ public class PayController {
             e.printStackTrace();
             return new Result(false,"支付失败");
         }
+    }
 
+    @RequestMapping("/cancelPay")
+    public Result cancelPay(){
+        try {
+            String userId=SecurityContextHolder.getContext().getAuthentication().getName();
+            seckillOrderService.cancelPay(userId);
+            return new Result(true, "取消订单成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "取消订单失败");
+        }
     }
 }
