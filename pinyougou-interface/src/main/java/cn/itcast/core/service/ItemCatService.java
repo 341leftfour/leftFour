@@ -10,4 +10,9 @@ public interface ItemCatService {
     ItemCat findOne(Long id);
 
     List<ItemCat> findAll();
+
+
+
+    //网站前台商品分类显示
+    public List<ItemCat> findItemCatList();
 }
