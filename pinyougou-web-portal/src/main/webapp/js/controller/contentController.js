@@ -18,4 +18,18 @@ app.controller("contentController",function($scope,contentService){
 		location.href="http://localhost:9103/search.html#?keywords="+$scope.keywords;
 	}
 	//http://localhost:9103/search.html  跳转到search.html  ng-init=loadKeywords()   $location.search()['keywords']
+
+
+
+//网站前台商品分类信息展示
+    //查询商品分类信息
+    $scope.findItemCatList=function () {
+        contentService.findItemCatList().success(function (response) {
+            $scope.itemCatList=response;
+        })
+    }
+
+
+
+
 });

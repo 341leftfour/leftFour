@@ -23,4 +23,5 @@ public class ContentController {
     public List<Content> findByCategoryId(Long categoryId){
         return contentService.findByCategoryId(categoryId);
     }
+
 }

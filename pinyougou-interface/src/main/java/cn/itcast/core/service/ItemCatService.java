@@ -12,6 +12,11 @@ public interface ItemCatService {
 
     List<ItemCat> findAll();
 
+
+
+    //网站前台商品分类显示
+    public List<ItemCat> findItemCatList();
+
     PageResult search(Integer page, Integer rows, ItemCat itemCat);
 
     void updateStatus(Long[] ids, String status);

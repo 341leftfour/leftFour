@@ -3,6 +3,8 @@ package cn.itcast.core.service;
 import cn.itcast.core.pojo.seller.Seller;
 import entity.PageResult;
 
+import java.util.List;
+
 /**
  *   商家管理
  */
@@ -25,4 +27,7 @@ public interface SellerService {
 
     //修改商家审核状态
     void updateStatus(String sellerId, String status);
+
+    //查询一个订单对象
+    List<Seller> findAll();
 }
