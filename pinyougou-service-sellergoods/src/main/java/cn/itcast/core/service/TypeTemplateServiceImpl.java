@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,17 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             typeTemplateDao.deleteByExample(typeTemplateQuery);
         }
     }
+
+    @Override
+    public void importExcel() throws IOException {
+        
+    }
+
+    @Override
+    public void exportExcel() {
+
+    }
+
 
     @Override
     public List <TypeTemplate> findAll() {
