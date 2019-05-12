@@ -32,5 +32,11 @@ app.service('itemCatService',function($http){
 	
 	this.findByParentId = function(parentId){
 		return $http.get("../itemCat/findByParentId.do?parentId="+parentId);
-	}
+	};
+    this.importExcel = function(){
+        return $http.get("../itemCat/importExcel.do");
+    };
+    this.exportExcel = function(){
+        return $http.get("../itemCat/exportExcel.do");
+    }
 });

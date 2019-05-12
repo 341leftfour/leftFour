@@ -29,4 +29,10 @@ app.service('typeTemplateService',function($http){
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../typeTemplate/search.do?page='+page+"&rows="+rows, searchEntity);
 	}
+    this.importExcel = function(){
+        return $http.get("../typeTemplate/importExcel.do");
+    }
+    this.exportExcel = function(){
+        return $http.get("../typeTemplate/exportExcel.do");
+    }
 });

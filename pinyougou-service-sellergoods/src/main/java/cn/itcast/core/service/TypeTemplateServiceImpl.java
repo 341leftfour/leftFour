@@ -1,7 +1,10 @@
 package cn.itcast.core.service;
 
+import cn.itcast.common.utils.ExportExcel;
+import cn.itcast.common.utils.ImportExcel;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
@@ -13,9 +16,11 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +38,12 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     private SpecificationOptionDao specificationOptionDao;
     @Autowired
     private RedisTemplate redisTemplate;
+
+
+    @Value("${importExcelTypeTemplate}")
+    private String importExcelTypeTemplate;
+    @Value("${exportExcelTypeTemplate}")
+    private String exportExcelTypeTemplate;
 
     //查询分页 条件
     @Override
@@ -128,5 +139,20 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             typeTemplateQuery.createCriteria().andIdIn(Arrays.asList(ids));
             typeTemplateDao.deleteByExample(typeTemplateQuery);
         }
+    }
+
+    @Override
+    public void importExcel() throws IOException {
+        List<TypeTemplate> list = (List<TypeTemplate>) ImportExcel.importExcel(importExcelTypeTemplate, 2, 0, TypeTemplate.class);
+        for (TypeTemplate typeTemplate : list) {
+            typeTemplateDao.insertSelective(typeTemplate);
+        }
+    }
+
+    @Override
+    public void exportExcel() {
+        String[] headers = {"ID","名称","关联规格","规格品牌","自定义属性","状态"};
+        List<TypeTemplate> typeTemplateList = typeTemplateDao.selectByExample(null);
+        ExportExcel.exportExcel("模板表","模板",headers,typeTemplateList,exportExcelTypeTemplate,"yyyy-MM-dd");
     }
 }

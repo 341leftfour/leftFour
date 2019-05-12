@@ -3,6 +3,7 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import entity.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +35,27 @@ public class ItemCatController {
     @RequestMapping("/findAll")
     public List<ItemCat> findAll(){
         return itemCatService.findAll();
+    }
+
+    @RequestMapping("/importExcel")
+    public Result importExcel(){
+        try {
+            itemCatService.importExcel();
+            return new Result(true,"导入成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导入失败");
+        }
+    }
+
+    @RequestMapping("/exportExcel")
+    public Result exportExcel(){
+        try {
+            itemCatService.exportExcel();
+            return new Result(true,"导出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导出失败");
+        }
     }
 }

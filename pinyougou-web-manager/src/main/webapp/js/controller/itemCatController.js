@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller,itemCatService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -107,15 +107,20 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		
 		$scope.findByParentId(p_entity.id);
 	}
+
+    // Excel数据导入到数据库
+    $scope.importExcel=function () {
+        itemCatService.importExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
+    // Excel数据导出到数据库
+    $scope.exportExcel=function () {
+        itemCatService.exportExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
     
 });	

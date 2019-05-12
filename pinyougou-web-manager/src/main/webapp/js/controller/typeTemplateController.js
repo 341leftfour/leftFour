@@ -109,4 +109,17 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
+
+    // Excel数据导入到数据库
+    $scope.importExcel=function () {
+        typeTemplateService.importExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
+    // Excel数据导出到数据库
+    $scope.exportExcel=function () {
+        typeTemplateService.exportExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
 });	

@@ -1,16 +1,19 @@
 package cn.itcast.core.service;
 
+import cn.itcast.common.utils.ExportExcel;
+import cn.itcast.common.utils.ImportExcel;
 import cn.itcast.core.dao.good.BrandDao;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,10 @@ public class BrandServiceImpl implements BrandService {
 
     @Autowired
     private BrandDao brandDao;
+    @Value("${importExcelBrand}")
+    private String importExcelBrand;
+    @Value("${exportExcelBrand}")
+    private String exportExcelBrand;
     //查询所有品牌
     @Override
     public List<Brand> findAll() {
@@ -136,5 +143,20 @@ public class BrandServiceImpl implements BrandService {
             brand.setId(id);
             brandDao.updateByPrimaryKeySelective(brand);
         }
+    }
+
+    @Override
+    public void importExcel(String file) throws IOException {
+        List<Brand> list = (List<Brand>) ImportExcel.importExcel(file, 2, 0, Brand.class);
+        for (Brand brand : list) {
+            brandDao.insertSelective(brand);
+        }
+    }
+
+    @Override
+    public void exportExcel(String file) {
+        String[] headers = {"ID","名称","首字母","状态"};
+        List<Brand> brandList = brandDao.selectByExample(null);
+        ExportExcel.exportExcel("品牌表","品牌",headers,brandList,file,"yyyy-MM-dd");
     }
 }

@@ -53,4 +53,25 @@ public class TypeTemplateController {
         return typeTemplateService.findOne(id);
     }
 
+    @RequestMapping("/importExcel")
+    public Result importExcel(){
+        try {
+            typeTemplateService.importExcel();
+            return new Result(true,"导入成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导入失败");
+        }
+    }
+
+    @RequestMapping("/exportExcel")
+    public Result exportExcel(){
+        try {
+            typeTemplateService.exportExcel();
+            return new Result(true,"导出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导出失败");
+        }
+    }
 }
