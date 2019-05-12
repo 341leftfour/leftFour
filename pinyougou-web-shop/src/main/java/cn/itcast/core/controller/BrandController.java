@@ -19,8 +19,6 @@ import java.util.Map;
 @RequestMapping("/brand")
 public class BrandController {
 
-
-    //啦啦啦猜猜我是  谁
     //远程调用 品牌接口
     //成员变量
     @Reference

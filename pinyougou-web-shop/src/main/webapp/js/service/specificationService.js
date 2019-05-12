@@ -33,4 +33,10 @@ app.service('specificationService',function($http){
 	this.selectOptionList=function(){
 		return $http.get("../specification/selectOptionList.do");
 	}
+    this.importExcel = function(){
+        return $http.get("../specification/importExcel.do");
+    }
+    this.exportExcel = function(){
+        return $http.get("../specification/exportExcel.do");
+    }
 });

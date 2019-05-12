@@ -59,6 +59,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         //select * from tb_type_template where ....   order by  id desc limit 开始行,每页数
 
         return new PageResult(p.getTotal(), p.getResult());
+
     }
 
     //添加
@@ -127,6 +128,23 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             TypeTemplateQuery typeTemplateQuery = new TypeTemplateQuery();
             typeTemplateQuery.createCriteria().andIdIn(Arrays.asList(ids));
             typeTemplateDao.deleteByExample(typeTemplateQuery);
+        }
+    }
+
+    @Override
+    public List <TypeTemplate> findAll() {
+        return typeTemplateDao.selectByExample ( null );
+    }
+
+    //开始审核  参数1:数组 商品表 的ID    参数2： 驳回  2
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+
+        //遍历
+        for (Long id : ids) {
+            TypeTemplate typeTemplate = typeTemplateDao.selectByPrimaryKey ( id );
+            typeTemplate.setStatus ( status );
+            typeTemplateDao.updateByPrimaryKey ( typeTemplate );
         }
     }
 }

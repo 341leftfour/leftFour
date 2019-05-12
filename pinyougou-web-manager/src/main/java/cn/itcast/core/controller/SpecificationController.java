@@ -82,4 +82,26 @@ public class SpecificationController {
     public List<Map> selectOptionList(){
         return specificationService.selectOptionList();
     }
+
+    @RequestMapping("/importExcel")
+    public Result importExcel(){
+        try {
+            specificationService.importExcel();
+            return new Result(true,"导入成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导入失败");
+        }
+    }
+
+    @RequestMapping("/exportExcel")
+    public Result exportExcel(){
+        try {
+            specificationService.exportExcel();
+            return new Result(true,"导出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导出失败");
+        }
+    }
 }

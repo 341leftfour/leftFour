@@ -22,6 +22,34 @@
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/brandController.js"></script>
     <script type="text/javascript" src="../js/service/brandService.js"></script>
+	<script>
+
+        function getPath(obj)
+        {
+            if(obj)
+            {
+
+                if (window.navigator.userAgent.indexOf("MSIE")>=1)
+                {
+                    obj.select();
+
+                    return document.selection.createRange().text;
+                }
+
+                else if(window.navigator.userAgent.indexOf("Firefox")>=1)
+                {
+                    if(obj.files)
+                    {
+
+                        return obj.files.item(0).getAsDataURL();
+                    }
+                    return obj.value;
+                }
+                return obj.value;
+            }
+        }
+        //参数obj为input file对象
+	</script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
   <!-- .box-body -->
@@ -43,6 +71,8 @@
 										<button type="button" ng-click="updateStatus('1')" class="btn btn-default" title="审核通过" ><i class="fa fa-check"></i> 审核通过</button>
 										<button type="button" ng-click="updateStatus('2')" class="btn btn-default" title="驳回" ><i class="fa fa-ban"></i> 驳回</button>
 										<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+										<button type="button" class="btn btn-default" title="导入" data-toggle="modal" data-target="#editModal2"><i class="fa fa-refresh"></i> 导入</button>
+										<button type="button" class="btn btn-default" title="导出" data-toggle="modal" data-target="#editModal1"><i class="fa fa-refresh"></i> 导出</button>
                                     </div>
                                 </div>
                             </div>
@@ -120,6 +150,41 @@
 	  </div>
 	</div>
 </div>
-   
+
+<!--导入导出文件 选择文件输入输出路径-->
+  <div class="modal fade" id="editModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" >
+		  <div class="modal-content">
+			  <div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				  <h3>请选择导出的Excel路径</h3>
+			  </div><br/>
+			  <div class="modal-body">
+				  <input type="file" ng-model="file" id="file"><br/><br/>
+				  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="exportExcel()">保存</button>
+
+			  </div>
+
+		  </div>
+	  </div>
+  </div>
+
+  <div class="modal fade" id="editModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" >
+		  <div class="modal-content">
+			  <div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				  <h3>请选择导入的Excel路径</h3>
+			  </div><br/>
+			  <div class="modal-body">
+				  <input type="file" id="file2"><br/><br/>
+				  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="importExcel()">保存</button>
+
+			  </div>
+
+		  </div>
+	  </div>
+  </div>
 </body>
+
 </html>

@@ -183,11 +183,12 @@
       status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-
-  <!--  //查询所有规格
-  List<Map> selectOptionList();-->
-  <select id="selectOptionList" resultType="map">
+  <!--查询商品list<map>给模板管理新建修改多选下拉框用
+  List<Map> selectOptionList();     手写sql把list变map-->
+  <select id="selectOptionList" resultType="Map">/*text别名*/
     select id,spec_name text from tb_specification
   </select>
+
+
+
 </mapper>
