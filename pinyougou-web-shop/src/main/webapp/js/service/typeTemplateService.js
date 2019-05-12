@@ -27,10 +27,8 @@ app.service('typeTemplateService',function($http){
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
+
 		return $http.post('../typeTemplate/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
-	//根据模板ID 查询规格结果集 List<Map
-	this.findBySpecList=function(id){
-		return $http.get('../typeTemplate/findBySpecList.do?id='+id);
 	}
+
 });

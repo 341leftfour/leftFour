@@ -2,8 +2,9 @@ package cn.itcast.core.dao.template;
 
 import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.pojo.template.TypeTemplateQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TypeTemplateDao {
     int countByExample(TypeTemplateQuery example);

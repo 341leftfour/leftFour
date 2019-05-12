@@ -22,86 +22,133 @@ import java.util.Map;
 @RequestMapping("/brand")
 public class BrandController {
 
+
     //远程调用 品牌接口
     //成员变量
     @Reference
     private BrandService brandService;
 
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+
+        try {
+            if (ids == null && ids.length == 0) {
+                return null;
+            }
+            brandService.updateStatus(ids, status);
+            return new Result(true, "状态成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true, "状态失败");
+    }
 
 
     //查询所有品牌
     @RequestMapping("/findAll")
-    public List<Brand> findAll(){
+    public List<Brand> findAll() {
 
 
         return brandService.findAll();
     }
+
     //查询分页对象 条件对象
     @RequestMapping("/search")
-    public PageResult search( Integer pageNum, Integer pageSize, @RequestBody Brand brand){
+    public PageResult search(Integer pageNum, Integer pageSize, @RequestBody Brand brand) {
 
-        return brandService.search(pageNum,pageSize,brand);
+        return brandService.search(pageNum, pageSize, brand);
 
 
     }
+
     //查询分页对象
     @RequestMapping("/findPage")
-    public PageResult findPage(Integer pageNum, Integer pageSize){
+    public PageResult findPage(Integer pageNum, Integer pageSize) {
 
-        return brandService.findPage(pageNum,pageSize);
+        return brandService.findPage(pageNum, pageSize);
 
 
     }
+
     //添加
     @RequestMapping("/add")
-    public Result add(@RequestBody Brand brand){
+    public Result add(@RequestBody Brand brand) {
         try {
             brandService.add(brand);
-            return new Result(true,"保存成功");
+            return new Result(true, "保存成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"保存失败");
+            return new Result(false, "保存失败");
         }
 
     }
+
     //修改
     @RequestMapping("/update")
-    public Result update(@RequestBody Brand brand){
+    public Result update(@RequestBody Brand brand) {
         try {
             brandService.update(brand);
-            return new Result(true,"修改成功");
+            return new Result(true, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"修改失败");
+            return new Result(false, "修改失败");
         }
 
     }
+
     //查询一个品牌
     @RequestMapping("/findOne")
-    public Brand findOne(Long id){
+    public Brand findOne(Long id) {
         return brandService.findOne(id);
     }
 
 
-
     //删除 开始  查询 Sprignmvc 课程 全局异常处理器
-      @RequestMapping("/delete")
-    public Result delete(Long[] ids){
-
-
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids) {
         try {
             brandService.delete(ids);
-            return new Result(true,"删除成功");
+            return new Result(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"删除失败");
+            return new Result(false, "删除失败");
         }
 
     }
+
     //查询List<Map>
     @RequestMapping("/selectOptionList")
-    public List<Map> selectOptionList(){
+    public List<Map> selectOptionList() {
         return brandService.selectOptionList();
+    }
+
+    @RequestMapping("/importExcel")
+    public Result importExcel(String file) {
+        if (file == null) {
+            return new Result(false, "导出失败");
+        }
+        try {
+            brandService.importExcel(file);
+            return new Result(true, "导入成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "导入失败");
+        }
+    }
+
+    @RequestMapping("/exportExcel")
+    public Result exportExcel(String file) {
+        if (file == null) {
+            return new Result(false, "导出失败");
+        }
+        try {
+            brandService.exportExcel(file);
+            return new Result(true, "导出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "导出失败");
+        }
+
     }
 
 }

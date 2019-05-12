@@ -7,7 +7,6 @@ import entity.PageResult;
 import entity.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vo.SpecificationVo;
 
@@ -26,6 +25,20 @@ public class SpecificationController {
     @Reference
     private SpecificationService specificationService;
 
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids,String status){
+
+        try {
+            if (ids==null && ids.length==0){
+                return null;
+            }
+            specificationService.updateStatus(     ids,  status);
+            return new Result(true,"状态成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true,"状态失败");
+    }
     //查询分页 条件
     @RequestMapping("/search")
     public PageResult search(Integer page, Integer rows, @RequestBody Specification specification){
@@ -64,9 +77,31 @@ public class SpecificationController {
         return specificationService.findOne(id);
     }
 
-    //查询所有规格 返回值List《Map
+    //查询所有规格 返回值List<Map>
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         return specificationService.selectOptionList();
+    }
+
+    @RequestMapping("/importExcel")
+    public Result importExcel(){
+        try {
+            specificationService.importExcel();
+            return new Result(true,"导入成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导入失败");
+        }
+    }
+
+    @RequestMapping("/exportExcel")
+    public Result exportExcel(){
+        try {
+            specificationService.exportExcel();
+            return new Result(true,"导出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导出失败");
+        }
     }
 }

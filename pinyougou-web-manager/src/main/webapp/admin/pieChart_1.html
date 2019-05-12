@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>销量统计</title>
+</head>
+
+<!--<body ng-app="pinyougou" ng-controller="pieChartController" ng-init="findSeller()">-->
+<body ng-app="app" ng-controller="pieChartController">
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div style="height:90%">
+
+    <div style="height: 90%">
+        <piebar id="pieCharts" legend="legend" data="data"></piebar>
+    </div>
+</div>
+
+<!-- 引入angular -->
+<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+<!-- 引入eCharts -->
+<script type="text/javascript" src="../gallery/vendors/echarts/echarts.min.js"></script>
+<!--<script type="text/javascript" src="../js/base.js"></script>-->
+<!--<script type="text/javascript" src="../js/controller/pieChartController.js"></script>-->
+<!--<script type="text/javascript" src="../js/service/pieChartService.js"></script>-->
+
+<script type="text/javascript">
+
+
+    var app = angular.module('app', []);
+    // console.log("ceshi输出");
+
+    //$scope.legend = ["男", "女","其他"];
+    //$scope.item = ['Jan', 'Feb', 'Mar', 'Ap r', 'Mar', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    //
+
+    app.controller('pieChartController', function ($scope) {
+        //$scope.legend = ["男", "女","其他"];
+        //$scope.item = ['Jan', 'Feb', 'Mar', 'Apr', 'Mar', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        /*[{"name":"341集团","value":0},{"name":"aaaa","value":0},{"name":"百度公司","value":0},{"name":"华为公司","value":0},{"name":"传智播客集团","value":0},{"name":"黑马程序员","value":0},{"name":"京东集团","value":0},{"name":"品优购","value":9},{"name":"千度公司","value":22},{"name":"唯品会","value":0},{"name":"宜家公司","value":4}];*/
+
+        $scope.data = [
+            {value: 58, name: '341集团'},
+            {value: 98, name: '宜家公司'},
+            {value: 78, name: '京东集团'},
+            {value: 36, name: '唯品会'},
+            {value: 56, name: '百度公司'},
+            {value: 32, name: '华为公司'},
+            {value: 112, name: '品优购'}
+        ];
+
+        // $scope.data = [
+        //     {value: 0, name: '341集团'},
+        //     {value: 0, name: 'aaaa'},
+        //     {value: 0, name: '百度公司'},
+        //     {value: 0, name: '华为公司'},
+        //     {value: 0, name: '传智播客集团'},
+        //     {value: 0, name: '黑马程序员'},
+        //     {value: 0, name: '京东集团'},
+        //     {value: 9, name: '品优购'},
+        //     {value: 22,name: '千度公司'},
+        //     {value: 0, name: '唯品会'},
+        //     {value: 4, name: '宜家公司'}
+        // ];
+
+    });
+
+    app.directive('piebar', function () {
+        return {
+            scope: {
+                id: "@",
+                legend: "=",
+                item: "=",
+                data: "="
+            },
+            restrict: 'E',
+            template: '<div style="height:750px;"></div>',
+            replace: true,
+            link: function ($scope, element, attrs, controller) {
+                var a = [];
+                var option = {
+
+                    title: {
+                        text: '品优购商家销量图',  //标题说明
+                        subtext: '纯属虚构',      //居中
+                        x: 'center'//居中
+                    },
+
+                    // 提示框，鼠标悬浮交互时的信息提示
+                    tooltip: {
+                        show: true,
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    // 图例
+                    legend: {
+                        /*x: 'center',
+                        y: 'bottom',
+                        data: $scope.legend,*/
+
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 120,
+                        top: 160,
+                        data: $scope.legend,
+                    },
+
+                    // 数据内容数组
+                    series: [
+                        {
+                            name: '',
+                            type: 'pie',
+                            radius: "55%",
+                            center: ['50%', '50%'],
+
+                            label: {
+                                normal: {
+                                    position: 'inner' //内置文本标签
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+
+
+                            data: $scope.data,
+
+
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: false
+                                    },
+                                    labelLine: {
+                                        show: false
+                                    }
+                                },
+                                emphasis: {
+                                    label: {
+                                        show: true,
+                                        position: 'outer'
+                                    },
+                                    labelLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: 'red'
+                                        },
+                                    },
+                                }
+                            }
+                        }
+
+                    ]
+
+                };
+                var myChart = echarts.init(document.getElementById($scope.id), 'macarons');
+                myChart.setOption(option);
+            }
+        };
+    });
+
+</script>
+
+</body>
+
+</html>

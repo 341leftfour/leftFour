@@ -1,34 +1,47 @@
 //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService  ,typeTemplateService){	
+app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService,typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
-		typeTemplateService.findAll().success(
+        typeTemplateService.findAll().success(
 			function(response){
 				$scope.list=response;
 			}			
 		);
-	}    
-	
+	}
+
 	//分页
-	$scope.findPage=function(page,rows){			
-		typeTemplateService.findPage(page,rows).success(
+	$scope.findPage=function(page,rows){
+        typeTemplateService.findPage(page,rows).success(
 			function(response){
 				$scope.list=response.rows;	
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
 	}
-	
-	//查询实体 
-	$scope.findOne=function(id){				
+
+    // 显示状态
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+    // 审核的方法:,
+
+	$scope.updateStatus=function (status) {
+		 typeTemplateService.updateStatus(status,$scope.selectIds).success(function (response) {
+
+		 	alert(response.message);
+		 	$scope.reloadList();
+         })
+    }
+
+
+	//查询实体
+	$scope.findOne=function(id){
 		typeTemplateService.findOne(id).success(
 			function(response){// TypeTemplate对象
 				$scope.entity= response;
 
-				// eval()   JSON.parse();   
+				// eval()   JSON.parse();
 				$scope.entity.brandIds = JSON.parse($scope.entity.brandIds);
 				
 				$scope.entity.specIds = JSON.parse($scope.entity.specIds);
@@ -109,4 +122,17 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
+
+    // Excel数据导入到数据库
+    $scope.importExcel=function () {
+        typeTemplateService.importExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
+    // Excel数据导出到数据库
+    $scope.exportExcel=function () {
+        typeTemplateService.exportExcel().success(function (response) {
+            alert(response.message);
+        })
+    }
 });	

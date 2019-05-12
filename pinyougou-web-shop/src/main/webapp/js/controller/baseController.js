@@ -32,21 +32,21 @@ app.controller("baseController",function($scope){
 	}
 	
 	// 定义方法：获取JSON字符串中的某个key对应值的集合
-	$scope.jsonToString = function(jsonStr,key){
-		// 将字符串转成JSOn:
-		var jsonObj = JSON.parse(jsonStr);
-		
-		var value = "";
-		for(var i=0;i<jsonObj.length;i++){
-			
-			if(i>0){
-				value += ",";
-			}
-			
-			value += jsonObj[i][key];
-		}
-		return value;
-	}
+    $scope.jsonToString = function(jsonStr,key){
+        // 将字符串转成JSOn:
+        var jsonObj = JSON.parse(jsonStr);
+
+        var value = "";
+        for(var i=0;i<jsonObj.length;i++){
+
+            if(i>0){
+                value += ",";
+            }
+
+            value += jsonObj[i][key];
+        }
+        return value;
+    }
 	
 	// 从集合中查询某个名称的值是否存在
 	$scope.searchObjectByKey = function(list,keyName,keyValue){
@@ -58,5 +58,9 @@ app.controller("baseController",function($scope){
 		
 		return null;
 	}
+
+
+
+
 	
 });

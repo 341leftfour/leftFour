@@ -1,7 +1,6 @@
 package cn.itcast.core.pojo.item;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ItemCat implements Serializable {
     /**
@@ -23,6 +22,11 @@ public class ItemCat implements Serializable {
      * 类型id
      */
     private Long typeId;
+
+    /**
+     * 未审核0审核1
+     */
+    private String status;
 
 
     //添加下级分类,作为属性

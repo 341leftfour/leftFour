@@ -2,7 +2,7 @@ package cn.itcast.core.pojo.seckill;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+
 
 public class SeckillGoods implements Serializable {
     private Long id;
@@ -45,12 +45,12 @@ public class SeckillGoods implements Serializable {
     /**
      * 添加日期
      */
-    private Date createTime;
+    private String createTime;
 
     /**
      * 审核日期
      */
-    private Date checkTime;
+    private String checkTime;
 
     /**
      * 审核状态
@@ -60,20 +60,20 @@ public class SeckillGoods implements Serializable {
     /**
      * 开始时间
      */
-    private Date startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
-     * 秒杀商品数
+     * 剩余库存
      */
     private Integer num;
 
     /**
-     * 剩余库存数
+     * 本次上架数量
      */
     private Integer stockCount;
 
@@ -148,19 +148,19 @@ public class SeckillGoods implements Serializable {
         this.sellerId = sellerId == null ? null : sellerId.trim();
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getCheckTime() {
+    public String getCheckTime() {
         return checkTime;
     }
 
-    public void setCheckTime(Date checkTime) {
+    public void setCheckTime(String checkTime) {
         this.checkTime = checkTime;
     }
 
@@ -172,19 +172,19 @@ public class SeckillGoods implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

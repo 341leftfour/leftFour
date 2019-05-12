@@ -5,11 +5,18 @@ import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.seckill.SeckillOrder;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.dubbo.container.page.PageHandler;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class OrderServiceImpl implements  OrderService {
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
@@ -80,7 +87,7 @@ public class OrderServiceImpl implements  OrderService {
                 //单价
                 orderItem.setPrice(item.getPrice());
                 //小计
-                orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue()*orderItem.getNum()));
+                orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue() * orderItem.getNum()));
 
 
                 //计算此订单的总金额
@@ -107,7 +114,7 @@ public class OrderServiceImpl implements  OrderService {
             //商家ID
             order.setSellerId(cart.getSellerId());
 
-            tp += order.getPayment().doubleValue()*100;
+            tp += order.getPayment().doubleValue() * 100;
 
             //保存订单
             orderDao.insertSelective(order);
@@ -132,19 +139,52 @@ public class OrderServiceImpl implements  OrderService {
         //支付类型
         payLog.setPayType("1");
         //订单集合   "1,2,3,4,5"
-        payLog.setOrderList(ids.toString().replace("[","").replace("]",""));
+        payLog.setOrderList(ids.toString().replace("[", "").replace("]", ""));
 
         //保存
         payLogDao.insertSelective(payLog);
 
         //保存缓存一份
-        redisTemplate.boundHashOps("payLog").put(order.getUserId(),payLog);
+        redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);
 
         //清除购物车
         //redisTemplate.boundHashOps("CART").delete(order.getUserId());
         //删除购物车中已经购买的商品
+    }
 
 
+    /**
+     * 通过商家ID ，查询订单表，获取订单数量(即商家销量)
+     */
+    @Override
+    public Integer selectCountBySellerId(String sellerId) {
 
+        Integer num = orderDao.selectCountBySellerId(sellerId);
+        return num;
+    }
+
+    @Override
+    public PageResult search(Integer page, Integer rows, Order order) {
+        PageHelper.startPage(page,rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        if(null!=order.getSellerId() && !"".equals(order.getSellerId())){
+            criteria.andSellerIdEqualTo(order.getSellerId());
+        }
+        orderQuery.setOrderByClause("create_time DESC");
+        Page<Order> orders = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(orders.getTotal(),orders.getResult());
+    }
+
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+        //修改商品状态
+        Order order = new Order();
+        order.setStatus(status);
+
+        for (Long id : ids) {
+            order.setOrderId(id);
+            orderDao.updateByPrimaryKeySelective(order);
+        }
     }
 }

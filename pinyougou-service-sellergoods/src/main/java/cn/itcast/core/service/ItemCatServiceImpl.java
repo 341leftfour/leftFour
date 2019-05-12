@@ -90,4 +90,30 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 
 
+
+
+    //分页查询所有商品分类(模糊查询)
+    @Override
+    public PageResult search(Integer page, Integer rows, ItemCat itemCat) {
+
+        PageHelper.startPage ( page, rows );//(2)相当于在(1)中拼接 limit 开始行 每页数
+
+        ItemCatQuery query = new ItemCatQuery ();
+
+        ItemCatQuery.Criteria criteria = query.createCriteria ();
+
+        Page<ItemCat> p = (Page <ItemCat>) itemCatDao.selectByExample (  query );
+
+        return new PageResult ( p.getTotal (), p.getResult () );
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        //遍历
+        for (Long id : ids) {
+            ItemCat itemCat = itemCatDao.selectByPrimaryKey ( id );
+            itemCat.setStatus ( status );
+            itemCatDao.updateByPrimaryKey ( itemCat );
+        }
+    }
 }

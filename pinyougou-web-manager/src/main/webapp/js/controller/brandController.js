@@ -79,5 +79,29 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 			$scope.list = response.rows;
 		});
 	}
-	
+
+	$scope.updateStatus=function (status) {
+		brandService.updateStatus(status,$scope.selectIds).success(function (response) {
+
+			alert(response.message);
+			$scope.reloadList();
+        })
+    }
+
+	$scope.status=['待审核','批准通过','驳回',null];
+
+	// Excel数据导入到数据库
+	$scope.importExcel=function () {
+        $scope.newFile2=getPath(document.getElementById("file2"));
+		brandService.importExcel($scope.newFile2).success(function (response) {
+            alert(response.message);
+        })
+    };
+    // 数据库导出到Excel
+    $scope.exportExcel=function () {
+        $scope.newFile=getPath(document.getElementById("file"));
+        brandService.exportExcel($scope.newFile).success(function (response) {
+            alert(response.message);
+        })
+    }
 });

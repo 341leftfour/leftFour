@@ -2,9 +2,11 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
+import cn.itcast.core.pojo.good.BrandQuery;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
 import cn.itcast.core.pojo.template.TypeTemplate;
+import cn.itcast.core.pojo.template.TypeTemplateQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,35 +38,36 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     //查询分页 条件
     @Override
     public PageResult search(Integer page, Integer rows, TypeTemplate typeTemplate) {
-        //查询所有模板结果集
-        List<TypeTemplate> typeTemplates = typeTemplateDao.selectByExample(null);
-        for (TypeTemplate template : typeTemplates) {
-
-            //品牌结果集  [{"id":35,"text":"牛栏山"},{"id":36,"text":"剑南春"},{"id":39,"text":"口子窑"}]
-            List<Map> brandList = JSON.parseArray(template.getBrandIds(), Map.class);
-            redisTemplate.boundHashOps("brandList").put(template.getId(),brandList);
-            //规格结果集  [{"id":40,"text":"颜色"},{"id":41,"text":"衣服尺码"}]
-            List<Map> specList = findBySpecList(template.getId());
-            redisTemplate.boundHashOps("specList").put(template.getId(),specList);
-
-
-        }
-
         //分页小助手
         PageHelper.startPage(page, rows);
-        //排序
-        PageHelper.orderBy("id desc");
 
-        Page<TypeTemplate> p = (Page<TypeTemplate>) typeTemplateDao.selectByExample(null);
+        //条件查询
+        TypeTemplateQuery typeTemplateQuery = new TypeTemplateQuery();
+        TypeTemplateQuery.Criteria criteria = typeTemplateQuery.createCriteria();
+
+
+        //判断状态
+        if (null != typeTemplate.getStatus() && !"".equals(typeTemplate.getStatus().trim())) {
+            criteria.andStatusEqualTo(typeTemplate.getStatus().trim());
+        }
+        //规格名称  模糊查询
+        if(null != typeTemplate.getName() && !"".equals(typeTemplate.getName().trim())){
+            criteria.andNameLike("%" + typeTemplate.getName().trim() + "%");
+        }
+
+        Page<TypeTemplate> p = (Page<TypeTemplate>) typeTemplateDao.selectByExample(typeTemplateQuery);
 
         //select * from tb_type_template where ....   order by  id desc limit 开始行,每页数
 
         return new PageResult(p.getTotal(), p.getResult());
+
     }
 
     //添加
     @Override
     public void add(TypeTemplate typeTemplate) {
+
+        typeTemplate.setStatus("0");
         typeTemplateDao.insertSelective(typeTemplate);
     }
 
@@ -75,7 +80,12 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     //修改
     @Override
     public void update(TypeTemplate typeTemplate) {
-        typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+        if (!typeTemplateDao.selectByPrimaryKey(typeTemplate.getId()).equals(typeTemplate)){
+            typeTemplate.setStatus("0");
+
+            typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+        }
+
     }
 
     //根据模板ID 查询规格结果集 List<Map> 每个Map里还有结果集
@@ -102,5 +112,51 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
 
         return specList;
+    }
+
+
+    //删除
+    @Override
+    public void delete(Long[] ids) {
+
+        if(null != ids && ids.length > 0){
+            //一个一个删除
+         /*   for (Long id : ids) {
+                brandDao.deleteByPrimaryKey(id);
+            }*/
+            //批量删除 delete * from tb_brand where id in (1,2,3)
+
+            TypeTemplateQuery typeTemplateQuery = new TypeTemplateQuery();
+            typeTemplateQuery.createCriteria().andIdIn(Arrays.asList(ids));
+            typeTemplateDao.deleteByExample(typeTemplateQuery);
+        }
+    }
+
+    @Override
+    public void importExcel() throws IOException {
+        
+    }
+
+    @Override
+    public void exportExcel() {
+
+    }
+
+
+    @Override
+    public List <TypeTemplate> findAll() {
+        return typeTemplateDao.selectByExample ( null );
+    }
+
+    //开始审核  参数1:数组 商品表 的ID    参数2： 驳回  2
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+
+        //遍历
+        for (Long id : ids) {
+            TypeTemplate typeTemplate = typeTemplateDao.selectByPrimaryKey ( id );
+            typeTemplate.setStatus ( status );
+            typeTemplateDao.updateByPrimaryKey ( typeTemplate );
+        }
     }
 }

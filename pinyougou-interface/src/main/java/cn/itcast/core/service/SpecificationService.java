@@ -4,6 +4,7 @@ import cn.itcast.core.pojo.specification.Specification;
 import entity.PageResult;
 import vo.SpecificationVo;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,4 +18,12 @@ public interface SpecificationService {
     void update(SpecificationVo vo);
 
     List<Map> selectOptionList();
+
+    void delete(Long[] ids);
+
+    void updateStatus(Long[] ids, String status);
+
+    void importExcel() throws IOException;
+
+    void exportExcel();
 }
