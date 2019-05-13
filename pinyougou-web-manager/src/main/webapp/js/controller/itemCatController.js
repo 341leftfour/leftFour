@@ -68,13 +68,13 @@ app.controller('itemCatController' ,function($scope,$controller,itemCatService){
 			}		
 		);				
 	}
-    $scope.updateStatus=function (status) {
-        typeTemplateService.updateStatus(status,$scope.selectIds).success(function (response) {
-
+	$scope.updateStatus=function(status) {
+		itemCatService.updateStatus(status,$scope.selectIds).success(function (response) {
             alert(response.message);
             $scope.reloadList();
         })
-    }
+	}
+
 
     $scope.status = ["未审核","审核通过","审核未通过","关闭"];
     $scope.itemCatList = [];

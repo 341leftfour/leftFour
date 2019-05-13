@@ -24,6 +24,14 @@ public class ItemCat implements Serializable {
      */
     private Long typeId;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     /**
      * 未审核0审核1
      */
@@ -128,4 +136,6 @@ public class ItemCat implements Serializable {
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         return result;
     }
+
+
 }

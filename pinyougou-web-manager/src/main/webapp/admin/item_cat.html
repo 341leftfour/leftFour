@@ -83,7 +83,7 @@
 			</thead>
 			<tbody>
 			<tr ng-repeat="entity in list">
-				<td><input ng-click="updateSelection($event,entity.id)" type="checkbox" ng-init="findOne(entity.parentId)"></td>
+				<td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>
 				<td>{{entity.id}}</td>
 				<td>{{entity.name}}</td>
 				<td>{{entity.typeId}}</td>
