@@ -2,11 +2,14 @@ package cn.itcast.core.pojo.item;
 
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.solr.core.mapping.Dynamic;
+import vo.KeyValueVo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Item implements Serializable {
 
@@ -113,10 +116,22 @@ public class Item implements Serializable {
     private String spec;//转成Map K V
 
 
+
     //创建一个Map 保存规格
     @Dynamic
     @Field("item_spec_*")
     private Map<String,String> specMap;
+
+
+    private List<KeyValueVo> keyValueVoList;
+
+    public List<KeyValueVo> getKeyValueVoList() {
+        return keyValueVoList;
+    }
+
+    public void setKeyValueVoList(List<KeyValueVo> keyValueVoList) {
+        this.keyValueVoList = keyValueVoList;
+    }
 
     public Map<String, String> getSpecMap() {
         return specMap;

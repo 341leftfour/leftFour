@@ -1,7 +1,11 @@
 package cn.itcast.core.pojo.order;
 
+import cn.itcast.core.pojo.item.Item;
+import vo.KeyValueVo;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 public class OrderItem implements Serializable {
@@ -49,6 +53,17 @@ public class OrderItem implements Serializable {
     private String picPath;
 
     private String sellerId;
+
+   private Item item;
+
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     private static final long serialVersionUID = 1L;
 

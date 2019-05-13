@@ -41,7 +41,7 @@
 
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">  
         <!--service 配置自身工程的根地址+/login/cas   -->  
-        <beans:property name="service" value="http://localhost:9103/login/cas"/>
+        <beans:property name="service" value="http://localhost:9108/login/cas"/>
     </beans:bean>  
     <!-- CAS入口点 结束 -->
 
@@ -90,7 +90,7 @@
 
     <!-- 经过此配置，当用户在地址栏输入本地工程 /logout/cas   清空Cookie 票据也清空  让中央认证服务器 注销Session    -->
     <beans:bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">  
-        <beans:constructor-arg value="http://192.168.200.128:9100/cas/logout?service=http://localhost:9104"/>
+        <beans:constructor-arg value="http://192.168.200.128:9100/cas/logout?service=http://localhost:9108"/>
         <beans:constructor-arg>  
             <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>  
         </beans:constructor-arg>  

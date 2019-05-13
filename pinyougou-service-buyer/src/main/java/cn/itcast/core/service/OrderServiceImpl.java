@@ -10,6 +10,7 @@ import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderItemQuery;
 import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.pojo.seckill.SeckillOrder;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import vo.Cart;
+import vo.OrderVo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -186,5 +188,42 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderId(id);
             orderDao.updateByPrimaryKeySelective(order);
         }
+    }
+    @Override
+    public List<OrderVo> findOrderListByUsername(String name) {
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.createCriteria().andUserIdEqualTo(name);
+        List<Order> orderList = orderDao.selectByExample(orderQuery);
+        ArrayList<OrderVo> orderVoList = new ArrayList<>();
+        for (Order order : orderList) {
+            OrderVo orderVo = new OrderVo();
+            orderVo.setOrderId(String.valueOf(order.getOrderId()));
+            orderVo.setPayment(order.getPayment());
+            orderVo.setPaymentType(order.getPaymentType());
+            orderVo.setStatus(order.getStatus());
+            orderVo.setCreateTime(order.getCreateTime());
+            orderVo.setUserId(order.getUserId());
+            orderVo.setReceiverAreaName(order.getReceiverAreaName());
+            orderVo.setReceiverMobile(order.getReceiverMobile());
+            orderVo.setReceiver(order.getReceiver());
+            orderVo.setSourceType(order.getSourceType());
+            orderVo.setSellerId(order.getSellerId());
+            orderVoList.add(orderVo);
+        }
+        return orderVoList;
+    }
+
+    @Override
+    public List<OrderItem> findOrderItem(String orderId) {
+        OrderItemQuery orderItemQuery = new OrderItemQuery();
+        orderItemQuery.createCriteria().andOrderIdEqualTo(Long.parseLong(orderId));
+        List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
+        return orderItemList;
+    }
+
+    @Override
+    public Item findSpecByItemId(Long itemId) {
+        Item item = itemDao.selectByPrimaryKey(itemId);
+        return item;
     }
 }

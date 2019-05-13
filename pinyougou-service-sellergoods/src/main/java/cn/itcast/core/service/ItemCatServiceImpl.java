@@ -5,6 +5,9 @@ import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.pojo.item.ItemQuery;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,4 +119,10 @@ public class ItemCatServiceImpl implements ItemCatService {
             itemCatDao.updateByPrimaryKey ( itemCat );
         }
     }
+
+        @Override
+        public void add(ItemCat itemCat) {
+            itemCat.setStatus("0");
+            itemCatDao.insertSelective(itemCat);
+        }
 }

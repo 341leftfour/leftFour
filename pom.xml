@@ -22,6 +22,8 @@
         <module>pinyougou-web-shop</module>
         <module>pinyougou-web-manager</module>
         <module>pinyougou-web-portal</module>
+        <module>pinyougou- service- seckill</module>
+        <module>pinyougou-web-seckill</module>
     </modules>
 
     <!-- 集中定义依赖版本号 -->
@@ -48,6 +50,8 @@
     <!-- 依赖管理 不强制依赖  -->
     <dependencyManagement>
         <dependencies>
+
+
             <!-- Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>

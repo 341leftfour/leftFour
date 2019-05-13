@@ -34,4 +34,9 @@ public class SeckillServiceImpl implements SeckillService {
         return new PageResult(  pageList.getTotal(), pageList.getResult());
 
     }
+
+    @Override
+    public void updateStatus(String status, Long[] ids) {
+
+    }
 }
